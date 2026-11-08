@@ -25,7 +25,7 @@
 
 | Area | Use | Avoid | Why |
 |---|---|---|---|
-| Private check | OpenMined PSI 2.0.6 (`psi.js`, `openmined.psi`) | Writing your own set-intersection maths; plain hash comparison of gene names | Hashes of 570 genes can be reversed by trying them all |
+| Private check | OpenMined PSI 2.0.6 (`psi.js`, `openmined.psi`) | Writing your own set-intersection maths; plain hash comparison of gene names | Hashes of a few hundred gene names can be reversed by trying them all |
 | Signatures | Ed25519 via WebCrypto (fallback `@noble/ed25519`) and PyNaCl | RSA with homemade padding; JWT `none` algorithm; unsigned credentials | Standard, hard to misuse |
 | Keyed tokens | HMAC-SHA256 with the national key | Plain SHA-256 of gene names; per-lab token keys | Per-lab keys break cross-lab matching |
 | Device storage | WebCrypto AES-GCM with a non-exportable key, IndexedDB | `localStorage` for anything sensitive; storing keys next to data | `localStorage` is readable by any script on the page |
@@ -110,7 +110,7 @@
 ## 8. Testing rules
 
 - **Every feature** has its acceptance test from `PRD.md` §6, automated where possible.
-- **Privacy tests are mandatory in CI:** forged token rejected, all-570 attack rejected, revoke blocks access, audit tamper detected, relay log scan clean.
+- **Privacy tests are mandatory in CI:** forged token rejected, all-genes attack rejected, revoke blocks access, audit tamper detected, relay log scan clean.
 - **Safety red-team** re-runs whenever cards, prompts or the model change.
 - **End-to-end:** the demo script runs as an automated test against staging every night.
 - **Devices:** test on one mid-range Android phone and one iPhone before each gate.

@@ -4,7 +4,7 @@
 
 | Threat | Control | Test |
 |---|---|---|
-| Attacker claims all 570 genes to probe a victim | Tokens only for genes in a lab-signed credential; partner sets must carry the national signature | `test_attack_rejected...`, `test_gene_not_in_credential_refused`, `test_forged_all_570_rejected` |
+| Attacker claims every gene on the panel (111 in the prototype, 570 in the real programme) to probe a victim | Tokens only for genes in a lab-signed credential; partner sets must carry the national signature | `test_attack_rejected...`, `test_gene_not_in_credential_refused`, `test_forged_all_panel_genes_rejected` |
 | Replay of a victim's signed token set | Set bound to device key; each side signs the session id | `test_replayed_set_and_expired_session` |
 | Dictionary attack on hashed gene names | Keyed HMAC tokens (national key, rotated per period); PSI, not hash comparison | attack demo (plain hashing leaks, AMANA does not) |
 | Set-size leakage | Both sides pad to 128 items | `PAD_TO` in `sim/eval/protocol.py` |

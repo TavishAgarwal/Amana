@@ -171,7 +171,7 @@ Colour-blind-safe set, used in this order: `#0072B2` · `#E69F00` · `#009E73` �
 - **Purpose:** the person's own carrier result.
 - **Content order:**
   1. PrivacyNote.
-  2. Summary: "You carry 1 change in a gene" (or "No carrier changes found among the 570 genes screened").
+  2. Summary: "You carry 1 change in a gene" (or "No carrier changes found among the {n} genes screened", where `{n}` is the panel size from the country pack: 111 in the prototype, 570 in the real programme).
   3. One ConditionCard preview per carrier gene, each with "Learn more".
   4. "Carriers are healthy" reassurance line.
   5. Secondary actions: "Check together with a partner", "Talk to a counsellor".
@@ -198,7 +198,7 @@ Colour-blind-safe set, used in this order: `#0072B2` · `#E69F00` · `#009E73` �
 ### W7 · Check: progress and result
 - **Purpose:** run the check and show the answer.
 - **Content:** progress step ("Checking privately…", with a short line "Your results never leave your phone"), then ResultPanel:
-  - "No shared-gene risk found among the 570 genes screened." Next step: "Learn about your own result".
+  - "No shared-gene risk found among the {n} genes screened." Next step: "Learn about your own result".
   - "You share a change in the same gene." Next step: "Show which condition" (W8) and "Talk to a counsellor".
 - **Notes:** both outcomes appear with identical layout and colour, and the same duration on screen before the next step, so the screen can't be read by a glance at the colour.
 
@@ -259,7 +259,7 @@ Counsellor or programme manager sign-in via the mock national-ID provider; role 
 
 ### C6 · Attack demo
 - **Layout:** two columns:
-  - **Plain matching:** the attacker claims all 570 genes, and the victim's full list appears.
+  - **Plain matching:** the attacker claims every gene on the panel, and the victim's full list appears.
   - **AMANA:** the same attempt is rejected with the reason ("Tokens not signed by the national service").
 - **Style:** clearly marked "Demonstration" banner, so it is never confused with the real app.
 
@@ -278,7 +278,7 @@ Used for Gate 2 and the final video. Two phones (Mariam, Khalid) + a laptop (con
 | 1:25 | W7 | "You share a change in the same gene" |
 | 1:35 | W8 | Both tap reveal → β-thalassaemia card |
 | 1:45 | C2 → C3 | Console: case appears with Tier 3 timer; copilot draft; sign-off |
-| 1:55 | C6 | Attack phone tries all 570 genes → rejected |
+| 1:55 | C6 | Attack phone tries every gene on the panel → rejected |
 | 2:10 | W10 | Mariam's sharing log; she revokes the counsellor permission |
 | 2:20 | C5 | Dashboard: understanding result, fairness, scale panel |
 | 2:45 | Slide | Ask: pilot with DoH/ADPHC + one lab; Gulf programmes next |
@@ -304,7 +304,7 @@ Used for Gate 2 and the final video. Two phones (Mariam, Khalid) + a laptop (con
 | result.carrier.f | You carry one change in the HBB gene. Carriers are healthy. | أنتِ تحملين تغيّرًا واحدًا في جين HBB. حاملو التغيّرات الجينية أصحّاء. |
 | result.carrier.m | You carry one change in the HBB gene. Carriers are healthy. | أنتَ تحمل تغيّرًا واحدًا في جين HBB. حاملو التغيّرات الجينية أصحّاء. |
 | check.explain | You'll both learn only one thing: whether you share a risk in the same gene. | ستعرفان أمرًا واحدًا فقط: هل لديكما خطر مشترك في الجين نفسه. |
-| check.none | No shared-gene risk found among the 570 genes screened. | لم يُعثر على خطر مشترك في الجينات الـ570 التي فُحصت. |
+| check.none | No shared-gene risk found among the {n} genes screened. | لم يُعثر على خطر مشترك في الجينات الـ{n} التي فُحصت. |
 | check.shared | You share a change in the same gene. A counsellor can explain what this means and your options. | لديكما تغيّر في الجين نفسه. يمكن للمستشار أن يشرح لكما ما يعنيه ذلك والخيارات المتاحة. |
 | reveal.ask | Show which condition? Both of you need to agree. | هل تريدان معرفة الحالة؟ يجب أن يوافق كلاكما. |
 | reveal.declined | Your partner chose not to see the condition now. You can still talk to a counsellor. | اختار شريكك عدم معرفة الحالة الآن. لا يزال بإمكانك التحدث مع مستشار. |

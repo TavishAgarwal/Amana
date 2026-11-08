@@ -149,7 +149,7 @@ sequenceDiagram
 4. The wallet shows the condition card and offers a counsellor (Tier 3).
 
 **Why a cheat fails (I-F8):**
-- An attacker who claims all 570 genes cannot produce valid tokens for genes they don't carry, because tokens need the national key.
+- An attacker who claims every gene on the panel cannot produce valid tokens for genes they don't carry, because tokens need the national key.
 - A forged or altered token set fails the signature check before the check runs.
 - The demo shows both rejections with the logged reason.
 
@@ -247,7 +247,7 @@ sequenceDiagram
 | Who might attack | What they want | Mitigation |
 |---|---|---|
 | Curious partner | Learn my other carrier genes | Count-only check first; reveal needs both consents; intersection shows only shared genes |
-| Cheating partner | Claim all 570 genes to learn my full list | Tokens need the national key; token-set signature checked before the check |
+| Cheating partner | Claim every gene on the panel to learn my full list | Tokens need the national key; token-set signature checked before the check |
 | Relay operator | Learn genes from traffic | Relay sees only scrambled values; stores nothing |
 | AMANA operator / database leak | Learn people's results | No gene lists on servers; identities hashed; permissions required for case data |
 | Family member with my phone | Read my results | Device encryption; app lock; content hidden when the app is in the background |
@@ -332,7 +332,7 @@ amana/
 │       │   ├── queue/              tiered case queue
 │       │   ├── case/[id]/          case detail, copilot summary, sign-off
 │       │   ├── dashboard/          evaluation + scale dashboard
-│       │   └── attack-demo/        "claim all 570 genes" demo screen
+│       │   └── attack-demo/        "claim every gene on the panel" demo screen
 │       ├── components/
 │       ├── messages/ar.json, en.json
 │       └── tests/

@@ -34,7 +34,7 @@ def test_step2_needs_both_consents_then_names_gene():
     assert run_check(a, b, Relay(), w.period, reveal=True)["genes"] == ["HBB"]
 
 
-def test_forged_all_570_rejected():
+def test_forged_all_panel_genes_rejected():
     w = World()
     a, b = w.wallet("a", P("a", ["HBB"])), w.wallet("b", P("b", ["PAH"]))
     b.token_set = w.forged(b, GENES)

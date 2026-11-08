@@ -1,4 +1,4 @@
-"""'Claim all 570 genes' attack, side by side with plain matching that leaks."""
+"""'Claim every gene on the panel' attack (111 genes in the prototype panel; 570 in the real programme), side by side with plain matching that leaks."""
 import hashlib
 
 from generator import load_panel
@@ -22,7 +22,7 @@ def run() -> dict:
     lab = w.labs[1]
     out = {"attempts": []}
 
-    # 1. Ask the token service for all 570 tokens on a credential that holds none of them.
+    # 1. Ask the token service for a token for every panel gene on a credential that holds none of them.
     cred: SignedCredential = lab.issue("attacker", [])
     try:
         w.svc.issue(lab.lab_id, lab.api_key, cred, genes, attacker.pk.hex(), now=w.now)

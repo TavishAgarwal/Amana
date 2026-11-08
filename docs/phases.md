@@ -109,7 +109,7 @@ Phases overlap by half a day on purpose: one person can finish the last phase's 
 
 | Owner | Tasks |
 |---|---|
-| **B** | Wallet imports, verifies and encrypts the credential. "My result" screen. QR pairing. Count-only check end to end on two phones. Token-set signature check; forged tokens rejected. Attack demo: "claim all 570 genes" rejected, side-by-side with plain matching that leaks. |
+| **B** | Wallet imports, verifies and encrypts the credential. "My result" screen. QR pairing. Count-only check end to end on two phones. Token-set signature check; forged tokens rejected. Attack demo: "claim every gene on the panel" rejected, side-by-side with plain matching that leaks. |
 | **C** | Relay: one-time sessions, 5-minute expiry, rate limits, no storage. Mock national-ID sign-in. Records-exchange adapter delivering FHIR bundles. Log scrubber + log-scan test in CI. |
 | **A** | Explainer v0: card store, AI rewording, fact-checker v0. Red-team set v1 (50 prompts). |
 | **D** | Cards 6–10. Hi-fi designs for pairing, check result and reveal. Reveal and consent copy reviewed for neutral wording. Confirm advisor (fallback R3 if none by Tue 10 Nov). |
@@ -122,7 +122,7 @@ Phases overlap by half a day on purpose: one person can finish the last phase's 
 **Exit criteria**
 - [ ] Two phones pair by QR and get "shared risk: yes/no".
 - [ ] 1,000 synthetic couples: every shared-gene couple found, no false alarms.
-- [ ] Forged token set rejected; all-570 attack rejected with logged reason.
+- [ ] Forged token set rejected; all-genes attack rejected with logged reason.
 - [ ] Relay log scan finds no gene names or token values.
 - [ ] Sign-in works through the mock adapter.
 

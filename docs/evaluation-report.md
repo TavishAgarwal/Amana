@@ -1,17 +1,17 @@
 # AMANA: Evaluation report
 
-Source: `sim/eval/results.json` (harness `sim/eval/harness.py`, seeds fixed). Gene panel is the real 111-gene ClinVar-based list; relative gene frequencies come from gnomAD v4 (Middle Eastern group) x ClinVar, scaled to the 4.8% target; couples are still simulated.
+Source: `sim/eval/results.json` (harness `sim/eval/harness.py`, seeds fixed). Re-run on 9 Nov 2026: results reproduced exactly (only timings vary by under 1%). Every number below is copied from that file; if they ever disagree, the file is right. Gene panel is the real 111-gene ClinVar-based list; relative gene frequencies come from gnomAD v4 (Middle Eastern group) x ClinVar, scaled to the 4.8% target; couples are still simulated.
 
 | Area | Result |
 |---|---|
-| Correctness | 5,000 couples, every one issued by two different labs: 217 incompatible, **0 missed, 0 false alarms** (100%) |
-| Simulated incompatible rate | 4.34% (target 4.8%, within the ±1.5 point tolerance) |
+| Correctness | 5,000 couples, every one issued by two different labs: 271 incompatible, **0 missed, 0 false alarms** (100%) |
+| Simulated incompatible rate | 5.42% (271 of 5,000; target 4.8%, within the ±1.5 point tolerance) |
 | Privacy/security suite | 23 tests passed (forged token, all-genes attack, replay, expiry, revoke, audit tamper, relay log scan) |
 | Red-team | 100 prompts (Arabic, English, mixed): 0 directive, 0 unsupported. Automated check only; **two human reviewers still needed**. Rewording is off, so this tests card retrieval and refusal, not an LLM |
 | Routing | 1,000 of 1,000 cases to the expected tier |
-| Load | 10,000 real PSI checks, 0 errors, 54.6 ms per check on one core. 100,000 is **extrapolated** (about 1.5 core-hours), not measured. This times the Python wallet logic, not the relay, phones or network |
+| Load | 10,000 real PSI checks, 0 errors, 24.9 ms per check on one core (249 s in total). 100,000 is **extrapolated** (about 0.69 core-hours), not measured. This times the Python wallet logic, not the relay, phones or network |
 | Cost per couple (AED) | **Estimate** about 0.11–0.21 AED per couple per year at 10,000 couples (hosting only; see `docs/cost-model.md`; prices are assumptions until checked in the Azure calculator) |
-| Card coverage | **51.7%** of simulated incompatible couples share a gene that has a reviewed card (2.3% with the original placeholder panel). Indicative only: frequencies are scaled to the target, not measured |
+| Card coverage | **51.7%** of simulated incompatible couples (15 cards over a 111-gene panel) share a gene that has a reviewed card (2.3% with the original placeholder panel). Indicative only: frequencies are scaled to the target, not measured |
 | Real-frequency check | Using the gnomAD Middle Eastern x ClinVar frequencies **without** calibration (35% first-cousin mix), the implied incompatible-couple rate is **3.98%**, against the 4.8% target. It is an under-estimate by construction (see `docs/limitations.md`), so the target is plausible but not confirmed |
 | Understanding before/after, fairness | Not run: needs the user test with real participants |
 | Time to counselling, reach | Not measured |

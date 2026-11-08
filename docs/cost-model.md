@@ -3,8 +3,8 @@
 **Status:** an estimate built from measured load and clearly labelled assumptions. Exact UAE North prices were not available to me (Azure's pricing pages did not show rates), so the cloud prices below are **assumptions to replace** with figures from the [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) set to UAE North.
 
 ## Measured
-- 25.1 ms of CPU per private check on one core (`sim/eval/results.json`, 10,000 checks, 0 errors).
-- 100,000 checks ≈ 0.7 core-hours (extrapolated, not measured at 100,000).
+- 24.9 ms of CPU per private check on one core (`sim/eval/results.json`, 10,000 checks, 0 errors; re-run 9 Nov 2026).
+- 100,000 checks ≈ 0.69 core-hours (extrapolated, not measured at 100,000).
 
 ## Assumptions (change these)
 | Item | Assumed monthly cost (USD) | Basis |

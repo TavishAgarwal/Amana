@@ -107,7 +107,7 @@ Priority: **MVP** = must ship by 19 Nov · **Lite** = MVP in reduced form · **M
 | I-F5 | **Two-step consent reveal + tamper-evident audit log** | MVP | US-6, 8 | Revoked or expired permission blocks access; editing any log entry breaks the chain check |
 | I-F6 | **Explainer + teach-back** | MVP | US-2, 3 | 0 unsupported claims and 0 directive statements on a 100-prompt red-team set; each card shows sources and review status |
 | I-F7 | **Counsellor console** with 3 tiers, copilot summary, mandatory sign-off | MVP | US-7, 11–13 | Case appears within 5 s of consent; 1,000 simulated cases routed to the right tier; nothing visible without permission; "clinical advice" label impossible without sign-off |
-| I-F8 | **Attack demo**: "claim all 570 genes" is rejected | MVP | — | Scripted attack fails with a logged reason; side-by-side with plain private matching shows the leak AMANA prevents |
+| I-F8 | **Attack demo**: "claim every gene on the panel" is rejected | MVP | — | Scripted attack fails with a logged reason; side-by-side with plain private matching shows the leak AMANA prevents |
 | I-F14 | **Integration adapters**: national-ID sign-in; health-records exchange (FHIR) | Mock | US-1 | Swapping mock for real needs config only; result arrives as a valid FHIR bundle |
 | I-F10 | **Evaluation + scale dashboard** | MVP | US-14, 15 | Understanding before/after, fairness by language/literacy (groups under 5 hidden), privacy and safety results, 100,000-couple load test, cost per couple |
 | I-F15 | **Content pipeline** | Lite | — | 25 reviewed cards; dashboard shows share of simulated incompatible matches covered |
