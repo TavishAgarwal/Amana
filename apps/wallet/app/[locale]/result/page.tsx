@@ -1,0 +1,21 @@
+"use client";
+import Link from "next/link";
+import { use, useEffect, useState } from "react";
+import { get, usePersona } from "@/lib/api";
+import { t } from "@/lib/i18n";
+
+export default function Result({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = use(params);
+  const [p] = usePersona();
+  const [r, setR] = useState<{ verified: boolean; carrier_cards: { gene: string; card: string | null }[] } | null>(null);
+  useEffect(() => { get(`/api/result/${p}?lang=${locale}`).then(setR); }, [p, locale]);
+  if (!r) return null;
+  return (<>
+    <h1>{t(locale, "result")}</h1>
+    <p className="soft">{t(locale, "verified")}</p>
+    {r.carrier_cards.length === 0 ? <p>{t(locale, "none")}</p> : <p>{t(locale, "carrier_intro")}</p>}
+    {r.carrier_cards.map((c) => (
+      <div className="card" key={c.gene}><strong dir="ltr">{c.gene}</strong>
+        {c.card && <p><Link className="btn secondary" href={`/${locale}/teach-back/${c.card}`}>{t(locale, "read_card")}</Link></p>}</div>))}
+  </>);
+}

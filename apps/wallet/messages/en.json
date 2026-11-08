@@ -1,0 +1,11 @@
+{ "app":"AMANA","welcome":"Welcome","choose":"Who are you? (demo persona)","lang":"Language","start":"Start",
+  "nav_result":"My result","nav_pair":"Check together","nav_sharing":"Sharing","nav_settings":"Settings",
+  "result":"My result","verified":"Verified: this result is signed by your lab.","carrier_intro":"You carry a change in these genes. This usually does not mean you are ill.",
+  "none":"No carrier changes were found in the panel.","read_card":"Read about it","review":"Review status","sources":"Sources",
+  "teachback":"Quick check","answer":"Choose an answer","correct":"Correct","notyet":"Not quite. Read the card again if you like.","literacy":"Reading comfort",
+  "low":"Low","mid":"Medium","high":"High","pair":"Check together","pair_with":"Check with","pair_help":"Both of you must agree. Only yes or no is shown first.","qr":"Pairing code (valid 5 minutes)",
+  "run":"Start private check","checking":"Checking privately...","shared_yes":"You share a change in the same gene.","shared_no":"You do not share a change in the same gene.",
+  "next":"Next step","show_cond":"Show which condition (both must agree)","talk":"Talk to a counsellor",
+  "reveal":"Reveal","reveal_info":"Nothing is shown until both of you agree.","agree":"I agree to reveal","waiting":"Waiting for your partner to agree.","revealed":"Shared condition",
+  "sharing":"Sharing and audit log","perm":"Permissions","none_perm":"Nothing is shared. This is the default.","share":"Share with counsellor","revoke":"Revoke","revoked":"Revoked","log":"Access log","chain_ok":"Log integrity verified","chain_bad":"Log integrity check failed",
+  "settings":"Settings","delete":"Withdraw all permissions","done":"Done","options":"Your options are yours to choose, including continuing without any intervention." }

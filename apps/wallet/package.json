@@ -1,0 +1,24 @@
+{
+  "name": "@amana/wallet",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3010",
+    "build": "next build",
+    "lint": "tsc --noEmit",
+    "test": "echo 'wallet e2e: see apps/wallet/tests'"
+  },
+  "dependencies": {
+    "@amana/ui": "workspace:*",
+    "next": "^16.4.5",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "axe-core": "^4.14.0",
+    "typescript": "^7.0.2"
+  }
+}
