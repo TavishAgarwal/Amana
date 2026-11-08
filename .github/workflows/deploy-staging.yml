@@ -1,0 +1,9 @@
+name: deploy-staging
+on:
+  workflow_dispatch:
+# Filled in once Azure UAE North resources exist (P0, owner C).
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "staging deploy not configured yet"

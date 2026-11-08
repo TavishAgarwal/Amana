@@ -1,0 +1,13 @@
+{
+  "name": "amana",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "pnpm -r --if-present lint",
+    "test": "pnpm -r --if-present test",
+    "db:up": "docker compose up -d postgres"
+  }
+}

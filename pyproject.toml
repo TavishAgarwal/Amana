@@ -1,0 +1,29 @@
+[project]
+name = "amana"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.162.2",
+    "fhir-resources>=8.3.0",
+    "httpx>=0.28.1",
+    "openmined-psi>=2.0.6",
+    "psycopg[binary]>=3.3.8",
+    "pydantic>=2.14.3",
+    "pynacl>=1.6.2",
+    "pyyaml>=6.0.3",
+    "uvicorn>=0.54.0",
+]
+
+[dependency-groups]
+dev = ["ruff", "pytest", "mypy"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "packages/schemas", "services/token-service", "services/lab-issuer",
+  "services/consent-ledger", "services/explainer", "services/adapters/mock-signin", "services/adapters/records-exchange", "services/adapters", "services/demo-api", "sim", ".",
+]
+testpaths = ["services", "sim", "packages"]

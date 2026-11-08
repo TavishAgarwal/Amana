@@ -1,0 +1,14 @@
+.env
+.local/
+node_modules/
+.venv/
+__pycache__/
+.next/
+sim/data/*
+!sim/data/.gitkeep
+.DS_Store
+
+data/raw/
+.pytest_cache/
+.ruff_cache/
+*.tsbuildinfo
