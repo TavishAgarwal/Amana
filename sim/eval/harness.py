@@ -9,10 +9,12 @@ from pathlib import Path
 
 from consent_ledger.cases import load_pack, route_tier
 from explainer.core import REFUSAL, CardStore, answer, has_directive, numbers
-from generator import generate_couples, load_panel
+from generator import generate_couples, incompatible_rate, load_panel, load_weights
 from token_service.core import Refused
 
 PANEL = os.environ.get("AMANA_PANEL", "packs/abu-dhabi/panel.csv")
+FREQ = os.environ.get("AMANA_FREQ", "packs/abu-dhabi/frequencies.csv")  # real relative frequencies, if present
+WEIGHTS = load_weights(FREQ) if Path(FREQ).exists() else None
 
 from sim.eval.protocol import CheckError, Relay, run_check
 from sim.eval.world import World
@@ -25,7 +27,7 @@ PRIVACY_TESTS = [
 
 def correctness(n: int, seed: int) -> dict:
     genes = load_panel(PANEL)
-    couples, _ = generate_couples(n, genes, seed)
+    couples, _ = generate_couples(n, genes, seed, weights=WEIGHTS)
     w, relay = World(), Relay()
     missed = false_alarms = positives = 0
     for i, c in enumerate(couples):
@@ -39,6 +41,18 @@ def correctness(n: int, seed: int) -> dict:
             "incompatible_rate": positives / n, "cross_lab": True,
             "accuracy": 1 - (missed + false_alarms) / n,
             "covered_by_card": _coverage(couples)}
+
+
+def population() -> dict:
+    """What the real gnomAD x ClinVar frequencies imply on their own, before calibrating to the 4.8% target."""
+    if WEIGHTS is None:
+        return {"note": f"{FREQ} not found; frequencies are synthetic"}
+    genes = load_panel(PANEL)
+    carrier = [min(2 * WEIGHTS.get(g, 0.0), 0.5) for g in genes]  # carrier probability is about 2q
+    return {"source": "gnomAD v4 (Middle Eastern group, else pooled) x ClinVar P/LP",
+            "genes_with_data": sum(g in WEIGHTS for g in genes), "target_rate": 0.048,
+            "uncalibrated_incompatible_rate": round(incompatible_rate(carrier), 4),
+            "note": "an under-estimate: counts only variants in both ClinVar and gnomAD; Arab populations are under-represented"}
 
 
 def _coverage(couples) -> float:
@@ -73,7 +87,7 @@ def redteam() -> dict:
 def routing(n: int, seed: int) -> dict:
     pack = load_pack("packs/abu-dhabi/pack.yaml")
     genes = load_panel(PANEL)
-    couples, _ = generate_couples(n, genes, seed)
+    couples, _ = generate_couples(n, genes, seed, weights=WEIGHTS)
     ok = sum(route_tier(pack, "incompatible" if c.shared else "compatible") ==
              (3 if c.shared else 1) for c in couples)
     return {"cases": n, "correct": ok}
@@ -81,7 +95,7 @@ def routing(n: int, seed: int) -> dict:
 
 def load(n: int, seed: int) -> dict:
     genes = load_panel(PANEL)
-    couples, _ = generate_couples(n, genes, seed)
+    couples, _ = generate_couples(n, genes, seed, weights=WEIGHTS)
     w, relay, errors = World(), Relay(), 0
     t0 = time.perf_counter()
     for i, c in enumerate(couples):
@@ -102,7 +116,7 @@ if __name__ == "__main__":
     ap.add_argument("--couples", type=int, default=5000)
     ap.add_argument("--load", type=int, default=10000)
     a = ap.parse_args()
-    res = {"correctness": correctness(a.couples, 11), "privacy": privacy(), "redteam": redteam(),
+    res = {"correctness": correctness(a.couples, 11), "population": population(), "privacy": privacy(), "redteam": redteam(),
            "routing": routing(1000, 5), "load": load(a.load, 13),
            "understanding": "not run: user test (n>=20) needs real participants",
            "fairness": "not run: depends on user test"}

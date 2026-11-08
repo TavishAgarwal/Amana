@@ -26,11 +26,31 @@ def incompatible_rate(freqs: list[float], cousin_share: float = COUSIN_SHARE) ->
     return 1 - ((1 - cousin_share) * none(False) + cousin_share * none(True))
 
 
+def load_weights(path: str | Path, floor: float = 1e-5) -> dict[str, float]:
+    """Relative gene frequencies from packs/<country>/frequencies.csv (gnomAD v4 x ClinVar).
+
+    Uses the Middle Eastern group when it saw any pathogenic allele, else the pooled frequency, else a tiny floor.
+    Only the relative sizes matter: the absolute scale is calibrated to the target incompatible rate.
+    """
+    with open(path) as f:
+        rows = list(csv.DictReader(ln for ln in f if not ln.startswith("#")))
+    out = {}
+    for r in rows:
+        q = float(r["q_mid"]) or float(r["q_global"])
+        out[r["gene"]] = max(q, floor)
+    return out
+
+
 def calibrated_frequencies(
-    genes: list[str], seed: int, target: float = TARGET_RATE, cousin_share: float = COUSIN_SHARE
+    genes: list[str], seed: int, target: float = TARGET_RATE, cousin_share: float = COUSIN_SHARE,
+    weights: dict[str, float] | None = None,
 ) -> dict[str, float]:
     rng = random.Random(seed)
-    base = [math.exp(rng.gauss(0, 1.2)) for _ in genes]  # heavy-tailed relative frequencies
+    if weights is not None:  # real relative frequencies; fall back to the median weight for unlisted genes
+        med = sorted(weights.values())[len(weights) // 2]
+        base = [weights.get(g, med) for g in genes]
+    else:
+        base = [math.exp(rng.gauss(0, 1.2)) for _ in genes]  # heavy-tailed relative frequencies
     lo, hi = 0.0, 0.2 / max(base)
     for _ in range(80):
         mid = (lo + hi) / 2
@@ -61,9 +81,10 @@ class Couple:
 
 
 def generate_couples(
-    n: int, genes: list[str], seed: int, cousin_share: float = COUSIN_SHARE
+    n: int, genes: list[str], seed: int, cousin_share: float = COUSIN_SHARE,
+    weights: dict[str, float] | None = None,
 ) -> tuple[list[Couple], dict[str, float]]:
-    freqs = calibrated_frequencies(genes, seed, cousin_share=cousin_share)
+    freqs = calibrated_frequencies(genes, seed, cousin_share=cousin_share, weights=weights)
     rng = random.Random(seed + 1)
     items = list(freqs.items())
     couples = []

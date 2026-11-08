@@ -23,3 +23,10 @@ Format: date, decision, reason, owner.
 - `psi.js` in the browser is still not used: installing it was declined, so the helper-service PSI stays (Gate 1 decision).
 - Service worker is unregistered in dev mode so a leftover production worker cannot serve stale files.
 - Cost per couple is an estimate with assumptions in `docs/cost-model.md`, not an Azure quote.
+
+## 2026-11-09: Browser PSI and real frequencies
+- `@openmined/psi.js` 2.0.6 added to the wallet (dev dependency; code in `lib/psi.ts`). Same version and parameters as the helper (FPR 1e-9, 128 padded items, GCS). Interop test: `apps/wallet/tests/psi-interop.test.mjs` with `psi_peer.py`. Installing it ran a post-install script that downloaded `protoc-gen-js` from GitHub.
+- gnomAD v4 (GRCh38) per-gene allele counts fetched from the public GraphQL API for the 111 panel genes (276 MB in `data/raw/gnomad/`, git-ignored). `data/build_frequencies.py` joins them with ClinVar P/LP (at least one-star review, not conflicting) into `packs/abu-dhabi/frequencies.csv`.
+- Variants above 2% pooled frequency are excluded (VPS13B c.9331-1G>T at 11%, a sequencing artefact; CFTR 5T at 2.9%, a variable-penetrance allele).
+- The generator uses these as relative weights and still calibrates the absolute scale to the 4.8% target. The uncalibrated implied rate (3.98%) is reported in `results.json` as a cross-check.
+- CTGA (cags.org.ae) was looked at but not used or scraped: it is bibliographic, has no frequencies, and no terms of use were found.

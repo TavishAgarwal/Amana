@@ -1,6 +1,6 @@
 # AMANA: Evaluation report
 
-Source: `sim/eval/results.json` (harness `sim/eval/harness.py`, seeds fixed). Gene panel is the real 111-gene ClinVar-based list; carrier frequencies and couples are still synthetic.
+Source: `sim/eval/results.json` (harness `sim/eval/harness.py`, seeds fixed). Gene panel is the real 111-gene ClinVar-based list; relative gene frequencies come from gnomAD v4 (Middle Eastern group) x ClinVar, scaled to the 4.8% target; couples are still simulated.
 
 | Area | Result |
 |---|---|
@@ -11,6 +11,7 @@ Source: `sim/eval/results.json` (harness `sim/eval/harness.py`, seeds fixed). Ge
 | Routing | 1,000 of 1,000 cases to the expected tier |
 | Load | 10,000 real PSI checks, 0 errors, 54.6 ms per check on one core. 100,000 is **extrapolated** (about 1.5 core-hours), not measured. This times the Python wallet logic, not the relay, phones or network |
 | Cost per couple (AED) | **Estimate** about 0.11–0.21 AED per couple per year at 10,000 couples (hosting only; see `docs/cost-model.md`; prices are assumptions until checked in the Azure calculator) |
-| Card coverage | **45.4%** of simulated incompatible couples share a gene that has a reviewed card (was 2.3% with the placeholder panel). Frequencies are still synthetic, so this is indicative, not a real-world figure |
+| Card coverage | **51.7%** of simulated incompatible couples share a gene that has a reviewed card (2.3% with the original placeholder panel). Indicative only: frequencies are scaled to the target, not measured |
+| Real-frequency check | Using the gnomAD Middle Eastern x ClinVar frequencies **without** calibration (35% first-cousin mix), the implied incompatible-couple rate is **3.98%**, against the 4.8% target. It is an under-estimate by construction (see `docs/limitations.md`), so the target is plausible but not confirmed |
 | Understanding before/after, fairness | Not run: needs the user test with real participants |
 | Time to counselling, reach | Not measured |
