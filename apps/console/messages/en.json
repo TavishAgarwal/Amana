@@ -1,0 +1,8 @@
+{ "queue":"Case queue","tier":"Tier","due":"Due","open":"Open","none":"No cases yet. Cases appear when a person shares with a counsellor.",
+  "case":"Case","summary":"Copilot draft (edit before use)","signoff":"Sign off as counsellor","label":"Label","info":"Information","advice":"Clinical advice","set_advice":"Mark as clinical advice",
+  "needs_signoff":"Sign-off is required before anything is labelled clinical advice.","denied":"Access is not permitted: the person revoked or the permission expired.",
+  "dashboard":"Evaluation and scale","correctness":"Check correctness","couples":"couples","missed":"missed","false_alarms":"false alarms","privacy":"Privacy and security tests","redteam":"Red-team (automated)","directive":"directive","unsupported":"unsupported",
+  "load":"Load test","ms":"ms per check (single core)","projection":"100,000 is extrapolated, not measured","coverage":"Share of simulated incompatible couples covered by a card","cards":"Cards reviewed","pending":"Not run yet: needs the user test",
+  "understanding":"Understanding before/after","fairness":"Fairness by language and literacy (groups under 5 hidden)",
+  "attack":"Attack demo: claim all genes","run":"Run attack","amana_leaks":"AMANA reveals","plain":"Plain hash matching reveals","nothing":"nothing","rejected":"Rejected",
+  "nav_queue":"Queue","nav_dash":"Dashboard","nav_attack":"Attack demo" }

@@ -1,0 +1,21 @@
+{
+  "name": "@amana/console",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3011",
+    "build": "next build",
+    "lint": "tsc --noEmit",
+    "test": "echo 'console e2e: see tests'"
+  },
+  "dependencies": {
+    "@amana/ui": "workspace:*",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}
