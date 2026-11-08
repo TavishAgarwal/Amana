@@ -7,3 +7,10 @@
 - https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
 
 Then run `python3 data/build_panel.py` from the repo root to rebuild `packs/abu-dhabi/panel-clinvar.csv`.
+
+## Frequencies (gnomAD x ClinVar)
+
+```bash
+uv run python data/fetch_gnomad.py        # ~276 MB from the public gnomAD v4 API, one request per gene, resumable
+uv run python data/build_frequencies.py   # writes packs/abu-dhabi/frequencies.csv
+```
