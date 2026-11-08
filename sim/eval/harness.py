@@ -94,7 +94,7 @@ def load(n: int, seed: int) -> dict:
             "ms_per_check_single_core": round(1000 * dt / n, 1),
             "projected_100k_core_hours": round(dt / n * 100_000 / 3600, 2),
             "projection": "extrapolated from this run, not measured at 100,000",
-            "cost_aed": "not computed: needs Azure UAE North price for the chosen SKU (assumption)"}
+            "cost_aed": "estimate in docs/cost-model.md: about 0.11-0.21 AED per couple per year at 10,000 couples (hosting only, assumptions to confirm in the Azure calculator)"}
 
 
 if __name__ == "__main__":

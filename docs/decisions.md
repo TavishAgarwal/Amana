@@ -16,3 +16,10 @@ Format: date, decision, reason, owner.
 - Genes: hand-curated AR list filtered by ClinVar ≥5 P/LP alleles (111 kept; `MUT` dropped as an outdated symbol, `MMUT` is kept).
 - `clinvar.vcf.gz` is downloaded but not used yet (variant-level matching is future work).
 - Harness: `AMANA_PANEL` / `AMANA_RESULTS` env vars select panel and output file.
+
+## 2026-11-09: Camera scan, app lock, cost model
+- QR scan uses `jsqr` on camera frames in the browser; frames are never uploaded or stored.
+- App lock: PIN stretched with PBKDF2 (310,000 iterations) into an AES-GCM key held only in memory; the cached result is stored encrypted in localStorage. This protects data at rest on the device from casual access; it is not a substitute for OS-level device encryption, and a 4-digit PIN is weak against an attacker who copies the storage.
+- `psi.js` in the browser is still not used: installing it was declined, so the helper-service PSI stays (Gate 1 decision).
+- Service worker is unregistered in dev mode so a leftover production worker cannot serve stale files.
+- Cost per couple is an estimate with assumptions in `docs/cost-model.md`, not an Azure quote.
