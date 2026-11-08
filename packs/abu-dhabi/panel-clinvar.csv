@@ -1,0 +1,113 @@
+# panel_version: 2026.11-clinvar (October 31, 2026)
+gene,condition_code,source,clinvar_pathogenic_alleles,clinvar_top_condition
+ABCC8,congenital-hyperinsulinism,clinvar,567,"Hyperinsulinemic hypoglycemia, familial, 1"
+ACADM,mcad-deficiency,clinvar,392,Medium-chain acyl-coenzyme A dehydrogenase deficiency
+ACADVL,vlcad-deficiency,clinvar,531,Very long chain acyl-CoA dehydrogenase deficiency
+AGXT,primary-hyperoxaluria-1,clinvar,357,"Primary hyperoxaluria, type I"
+ALDOB,hereditary-fructose-intolerance,clinvar,161,Hereditary fructosuria
+ASL,argininosuccinic-aciduria,clinvar,254,Argininosuccinate lyase deficiency
+ASPA,canavan,clinvar,209,Spongy degeneration of central nervous system
+ASS1,citrullinemia,clinvar,258,Citrullinemia type I
+ATP7B,wilson,clinvar,927,Wilson disease
+BCKDHA,msud,clinvar,209,Maple syrup urine disease
+BCKDHB,msud,clinvar,277,Maple syrup urine disease
+BCS1L,gracile,clinvar,147,GRACILE syndrome
+BLM,bloom-syndrome,clinvar,651,Bloom syndrome
+BTD,biotinidase-deficiency,clinvar,271,Biotinidase deficiency
+CAPN3,lgmd-2a,clinvar,569,Autosomal recessive limb-girdle muscular dystrophy type 2A
+CFTR,cystic-fibrosis,clinvar,1701,Cystic fibrosis
+CHRNE,congenital-myasthenic,clinvar,296,Congenital myasthenic syndrome 4A
+CLN3,batten,clinvar,276,Neuronal ceroid lipofuscinosis 3
+CLN5,batten,clinvar,167,Neuronal ceroid lipofuscinosis 5
+CLN6,batten,clinvar,135,Neuronal ceroid lipofuscinosis
+COL27A1,steel-syndrome,clinvar,164,Steel syndrome
+CPT2,cpt2-deficiency,clinvar,261,Carnitine palmitoyltransferase II deficiency
+CRB1,leber-congenital-amaurosis,clinvar,630,Leber congenital amaurosis 8
+CYP21A2,congenital-adrenal-hyperplasia,clinvar,165,21-Hydroxylase-Deficient Congenital Adrenal Hyperplasia
+DBT,msud,clinvar,202,Maple syrup urine disease
+DHCR7,smith-lemli-opitz,clinvar,320,Smith-Lemli-Opitz syndrome
+DYSF,lgmd-2b,clinvar,1064,Neuromuscular disease caused by qualitative or quantitative defects of dysferlin
+ETFDH,mad-deficiency,clinvar,318,Multiple acyl-CoA dehydrogenase deficiency
+FAH,tyrosinaemia-1,clinvar,207,Tyrosinemia type I
+FANCA,fanconi-anaemia,clinvar,1367,Fanconi anemia complementation group A
+FANCC,fanconi-anaemia,clinvar,356,Fanconi anemia complementation group C
+FKTN,walker-warburg,clinvar,197,Walker-Warburg congenital muscular dystrophy
+FOXRED1,complex-1-deficiency,clinvar,65,"Mitochondrial complex I deficiency, nuclear type 19"
+G6PC1,glycogen-storage-1a,clinvar,175,Glycogen storage disease due to glucose-6-phosphatase deficiency type IA
+GAA,pompe,clinvar,916,"Glycogen storage disease, type II"
+GALC,krabbe,clinvar,436,Galactosylceramide beta-galactosidase deficiency
+GALT,galactosaemia,clinvar,348,Deficiency of UDPglucose-hexose-1-phosphate uridylyltransferase
+GBA1,gaucher,clinvar,376,Gaucher disease
+GCDH,glutaric-aciduria-1,clinvar,346,"Glutaric aciduria, type 1"
+GJB2,hereditary-hearing-loss,clinvar,267,Autosomal recessive nonsyndromic hearing loss 1A
+GJB6,hereditary-hearing-loss,clinvar,25,Hidrotic ectodermal dysplasia syndrome
+GLB1,gm1-gangliosidosis,clinvar,354,"Mucopolysaccharidosis, MPS-IV-B;GM1 gangliosidosis"
+HADHA,lchad-deficiency,clinvar,276,Long chain 3-hydroxyacyl-CoA dehydrogenase deficiency
+HBA1,alpha-thalassaemia,clinvar,146,alpha Thalassemia
+HBA2,alpha-thalassaemia,clinvar,188,alpha Thalassemia
+HBB,beta-thalassaemia,clinvar,468,beta Thalassemia
+HEXA,tay-sachs,clinvar,367,Tay-Sachs disease
+HEXB,sandhoff,clinvar,277,Sandhoff disease
+HFE,hemochromatosis,clinvar,51,Hereditary hemochromatosis
+HGSNAT,mps-3c,clinvar,240,"Mucopolysaccharidosis, MPS-III-C"
+HMGCL,hmg-coa-lyase-deficiency,clinvar,127,Deficiency of hydroxymethylglutaryl-CoA lyase
+HSD17B4,dbp-deficiency,clinvar,285,Bifunctional peroxisomal enzyme deficiency
+IDUA,mps-1,clinvar,489,Mucopolysaccharidosis type 1
+IVD,isovaleric-acidaemia,clinvar,195,Isovaleryl-CoA dehydrogenase deficiency
+LAMA2,merosin-cmd,clinvar,1178,LAMA2-related muscular dystrophy
+LDLR,familial-hypercholesterolaemia-hom,clinvar,2330,"Hypercholesterolemia, familial, 1"
+LIPA,wolman,clinvar,181,Lysosomal acid lipase deficiency
+MCCC1,mccc-deficiency,clinvar,224,3-methylcrotonyl-CoA carboxylase 1 deficiency
+MCCC2,mccc-deficiency,clinvar,223,3-methylcrotonyl-CoA carboxylase 2 deficiency
+MEFV,familial-mediterranean-fever,clinvar,31,Familial Mediterranean fever
+MLC1,megalencephalic-leukoencephalopathy,clinvar,161,Megalencephalic leukoencephalopathy with subcortical cysts 1
+MMACHC,cblc,clinvar,192,Cobalamin C disease
+MMUT,methylmalonic-acidaemia,clinvar,444,Methylmalonic aciduria due to methylmalonyl-CoA mutase deficiency
+MTHFR,homocystinuria-mthfr,clinvar,210,Homocystinuria due to methylene tetrahydrofolate reductase deficiency
+NBN,nijmegen-breakage,clinvar,594,"Microcephaly, normal intelligence and immunodeficiency"
+NEB,nemaline-myopathy,clinvar,2125,Nemaline myopathy 2
+NPC1,niemann-pick-c,clinvar,701,"Niemann-Pick disease, type C1"
+NPC2,niemann-pick-c,clinvar,68,"Niemann-Pick disease, type C2"
+NPHS1,nephrotic-syndrome-finnish,clinvar,538,Finnish congenital nephrotic syndrome
+OAT,gyrate-atrophy,clinvar,174,Ornithine aminotransferase deficiency
+OTC,otc-deficiency,clinvar,459,Ornithine carbamoyltransferase deficiency
+PAH,phenylketonuria,clinvar,931,Phenylketonuria
+PC,pyruvate-carboxylase-deficiency,clinvar,229,Pyruvate carboxylase deficiency
+PCCA,propionic-acidaemia,clinvar,376,Propionic acidemia
+PCCB,propionic-acidaemia,clinvar,308,Propionic acidemia
+PDHB,pdh-deficiency,clinvar,44,Pyruvate dehydrogenase E1-beta deficiency
+PEX1,zellweger,clinvar,543,Zellweger spectrum disorders
+PEX6,zellweger,clinvar,346,Peroxisome biogenesis disorder
+PKHD1,arpkd,clinvar,1752,Autosomal recessive polycystic kidney disease
+PMM2,cdg-1a,clinvar,272,PMM2-congenital disorder of glycosylation
+POLG,polg-disorders,clinvar,487,Progressive sclerosing poliodystrophy
+PTPRC,scid,clinvar,39,Immunodeficiency 104
+PTS,bh4-deficiency,clinvar,113,6-Pyruvoyl-tetrahydrobiopterin synthase deficiency
+RAG2,scid,clinvar,153,Histiocytic medullary reticulosis
+RARS2,pontocerebellar-hypoplasia,clinvar,260,Pontocerebellar hypoplasia type 6
+SACS,arsacs,clinvar,1069,Charlevoix-Saguenay spastic ataxia
+SGCA,lgmd-2d,clinvar,210,Autosomal recessive limb-girdle muscular dystrophy type 2D
+SGCB,lgmd-2e,clinvar,147,Autosomal recessive limb-girdle muscular dystrophy type 2E
+SGCG,lgmd-2c,clinvar,145,Autosomal recessive limb-girdle muscular dystrophy type 2C
+SGSH,mps-3a,clinvar,228,"Mucopolysaccharidosis, MPS-III-A"
+SLC12A3,gitelman,clinvar,506,Familial hypokalemia-hypomagnesemia
+SLC17A5,sialic-acid-storage,clinvar,194,Salla disease
+SLC22A5,carnitine-deficiency,clinvar,305,Renal carnitine transport defect
+SLC26A4,pendred,clinvar,686,Autosomal recessive nonsyndromic hearing loss 4
+SLC37A4,glycogen-storage-1b,clinvar,196,Glucose-6-phosphate transport defect
+SMN1,spinal-muscular-atrophy,clinvar,93,Werdnig-Hoffmann disease
+SMPD1,niemann-pick-a-b,clinvar,406,"Niemann-Pick disease, type A"
+STAR,lipoid-cah,clinvar,132,Congenital lipoid adrenal hyperplasia due to STAR deficency
+TAT,tyrosinaemia-2,clinvar,84,Tyrosinemia type II
+TF,atransferrinaemia,clinvar,40,Atransferrinemia
+TGM1,lamellar-ichthyosis,clinvar,322,Autosomal recessive congenital ichthyosis 1
+TPP1,batten,clinvar,252,Neuronal ceroid lipofuscinosis 2
+TSFM,combined-oxphos-deficiency,clinvar,96,Fatal mitochondrial disease due to combined oxidative phosphorylation defect type 3
+TTR,ttr-amyloidosis,clinvar,134,"Amyloidosis, hereditary systemic 1"
+TYMP,mngie,clinvar,232,Mitochondrial DNA depletion syndrome 1
+TYR,oculocutaneous-albinism-1,clinvar,357,TYR-related disorder
+UROD,porphyria-cutanea,clinvar,64,Familial porphyria cutanea tarda
+USH2A,usher-2,clinvar,2536,Usher syndrome type 2A
+VPS13B,cohen,clinvar,1314,Cohen syndrome
+WNK1,pseudohypoaldosteronism,clinvar,80,"Neuropathy, hereditary sensory and autonomic, type 2A;Pseudohypoaldosteronism type 2C"
+XPC,xeroderma-pigmentosum,clinvar,246,"Xeroderma pigmentosum, group C"

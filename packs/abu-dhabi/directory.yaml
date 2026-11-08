@@ -1,0 +1,4 @@
+# Synthetic counsellors and slots only.
+counsellors:
+  - {id: c-001, name: "Counsellor A (synthetic)", languages: [ar, en], tiers: [2, 3]}
+  - {id: c-002, name: "Counsellor B (synthetic)", languages: [ar], tiers: [3]}

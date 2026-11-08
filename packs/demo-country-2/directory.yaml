@@ -1,0 +1,2 @@
+counsellors:
+  - {id: d-001, name: "Counsellor D (synthetic)", languages: [en], tiers: [2, 3]}

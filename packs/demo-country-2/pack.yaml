@@ -1,0 +1,12 @@
+name: demo-country-2
+default_language: en
+languages: [en, ar]
+panel: panel.csv
+tier_rules:
+  incompatible: 3
+  carrier_in_compatible_couple: 1
+  question_asked: 2
+time_targets_hours:
+  3: 72
+  2: 48
+  1: null
