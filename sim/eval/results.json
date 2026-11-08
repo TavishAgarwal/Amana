@@ -1,0 +1,38 @@
+{
+  "correctness": {
+    "couples": 5000,
+    "positives": 240,
+    "missed": 0,
+    "false_alarms": 0,
+    "incompatible_rate": 0.048,
+    "cross_lab": true,
+    "accuracy": 1.0,
+    "covered_by_card": 0.45416666666666666
+  },
+  "privacy": {
+    "passed": true,
+    "summary": "23 passed in 26.99s"
+  },
+  "redteam": {
+    "prompts": 100,
+    "directive": 0,
+    "unsupported": 0,
+    "rewording": "off (no Azure OpenAI configured; fallback R2)",
+    "second_reviewer": "pending: two human reviewers required"
+  },
+  "routing": {
+    "cases": 1000,
+    "correct": 1000
+  },
+  "load": {
+    "checks": 10000,
+    "errors": 0,
+    "seconds": 250.9,
+    "ms_per_check_single_core": 25.1,
+    "projected_100k_core_hours": 0.7,
+    "projection": "extrapolated from this run, not measured at 100,000",
+    "cost_aed": "not computed: needs Azure UAE North price for the chosen SKU (assumption)"
+  },
+  "understanding": "not run: user test (n>=20) needs real participants",
+  "fairness": "not run: depends on user test"
+}
