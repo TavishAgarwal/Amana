@@ -19,9 +19,9 @@ button, .btn { min-block-size:48px; padding-inline:20px; border-radius:10px; bor
 button.secondary, .btn.secondary { background:transparent; color:var(--primary); }
 html[data-theme="dark"] button { color:#121615; }
 @media (prefers-color-scheme: dark) { button:not(.secondary), .btn:not(.secondary) { color:#121615; } }
-button:focus-visible, a:focus-visible, select:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
 button:disabled { opacity:.5; cursor:not-allowed; }
-select { min-block-size:48px; font:inherit; padding-inline:12px; border:2px solid var(--border-strong); border-radius:10px; background:var(--surface); color:var(--text); }
+select, input { min-block-size:48px; font:inherit; padding-inline:12px; border:2px solid var(--border-strong); border-radius:10px; background:var(--surface); color:var(--text); }
 nav { display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px; padding-block-start:calc(8px + env(safe-area-inset-top)); padding-inline:max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); border-block-end:1px solid var(--border); }
 nav a { color:var(--primary); padding:8px 4px; }
 table { inline-size:100%; border-collapse:collapse; } td, th { text-align:start; padding:6px; border-block-end:1px solid var(--border); }
