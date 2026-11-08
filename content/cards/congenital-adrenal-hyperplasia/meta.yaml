@@ -1,0 +1,9 @@
+condition: congenital-adrenal-hyperplasia
+gene: CYP21A2
+sources:
+- GeneReviews
+- MedlinePlus
+reviewer: null
+review_status: pending clinical review
+arabic_review: pending native-speaker review
+version: 1

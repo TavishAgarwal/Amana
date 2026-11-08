@@ -1,0 +1,38 @@
+en:
+- q: If you are a carrier, does that usually mean you are ill?
+  options:
+  - 'Yes'
+  - 'No'
+  answer: 1
+- q: When both parents carry a change in the same gene, what is the chance for each
+    pregnancy that a child has the condition?
+  options:
+  - 1 in 4
+  - 1 in 2
+  - None
+  answer: 0
+- q: Who decides what to do with this information?
+  options:
+  - The couple, with support if they want it
+  - The lab
+  - The family
+  answer: 0
+ar:
+- q: إذا كنت حاملاً للتغيير الجيني، هل يعني ذلك عادة أنك مريض؟
+  options:
+  - نعم
+  - لا
+  answer: 1
+- q: عندما يحمل الوالدان تغييراً في الجين نفسه، ما احتمال إصابة الطفل بالحالة في كل
+    حمل؟
+  options:
+  - 1 من كل 4
+  - 1 من كل 2
+  - لا يوجد
+  answer: 0
+- q: من يقرر ما يُفعل بهذه المعلومات؟
+  options:
+  - الزوجان، مع الدعم إن رغبا
+  - المختبر
+  - العائلة
+  answer: 0
