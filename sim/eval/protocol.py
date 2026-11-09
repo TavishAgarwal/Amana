@@ -1,7 +1,13 @@
 """Reference implementation of the wallet side of the private check, plus an in-process relay.
 
-The relay here mirrors services/relay (sessions, 5-minute expiry, no storage, scrubbed logs).
-Private check = OpenMined PSI 2.0.6; step 1 count-only, step 2 intersection after both consent.
+Same protocol as the browser wallet (apps/wallet/lib/check.ts):
+- The hello carries a national attestation (period + device key) and a signature over the session id.
+  It never carries tokens, so a partner cannot match tokens directly and skip the consent steps.
+- The check runs in both directions: each wallet is PSI client once and computes its own result,
+  so neither side has to trust the other's answer.
+- Step 1 is count-only (shown as yes/no). Step 2 (intersection) is answered by a wallet only after
+  it has consented, so each wallet protects its own set.
+The relay mirrors services/relay (sessions, 5-minute expiry, no storage, scrubbed logs).
 """
 import os
 import secrets
@@ -11,7 +17,7 @@ import private_set_intersection.python as psi
 from private_set_intersection.python import DataStructure
 from schemas import signing
 from schemas.logscrub import scrub
-from schemas.models import SignedTokenSet
+from schemas.models import SignedTokenSet, attestation
 
 PAD_TO = 128  # fixed set size so set sizes leak nothing
 FPR = 1e-9
@@ -73,18 +79,26 @@ class Wallet:
     def load(self, ts: SignedTokenSet, genes_by_token: dict[str, str]):
         self.token_set, self.token_to_gene = ts, genes_by_token
 
-    def hello(self, sid: str) -> dict:
-        return {"set": self.token_set.model_dump(), "proof": signing.sign(self.sk, {"sid": sid})}
+    @property
+    def tokens(self) -> list[str]:
+        return self.token_set.token_set.tokens
 
-    def verify_partner(self, hello: dict, sid: str, period: int) -> list[str]:
-        ts = SignedTokenSet.model_validate(hello["set"])
-        if not signing.verify(self.national_pk, ts.token_set.model_dump(), ts.signature):
+    def hello(self, sid: str) -> dict:
+        ts = self.token_set.token_set
+        return {"period": ts.period, "holder_pk": ts.holder_pk,
+                "attestation": self.token_set.attestation_signature,
+                "proof": signing.sign(self.sk, {"sid": sid})}
+
+    def verify_partner(self, hello: dict, sid: str, period: int) -> str:
+        """Returns the partner's device key. Tokens are never part of the hello."""
+        att = attestation(hello["period"], hello["holder_pk"])
+        if not signing.verify(self.national_pk, att, hello["attestation"]):
             raise CheckError("forged_token_set")
-        if ts.token_set.period != period:
+        if hello["period"] != period:
             raise CheckError("expired_token_set")
-        if not signing.verify(bytes.fromhex(ts.token_set.holder_pk), {"sid": sid}, hello["proof"]):
+        if not signing.verify(bytes.fromhex(hello["holder_pk"]), {"sid": sid}, hello["proof"]):
             raise CheckError("replayed_token_set")
-        return ts.token_set.tokens
+        return hello["holder_pk"]
 
     def padded(self, tokens: list[str]) -> list[str]:
         if len(tokens) > PAD_TO:
@@ -92,35 +106,40 @@ class Wallet:
         return tokens + [os.urandom(16).hex() for _ in range(PAD_TO - len(tokens))]
 
 
+def _round(client_w: Wallet, server_w: Wallet, relay: Relay, sid: str, reveal: bool,
+           to_client: str, to_server: str):
+    """One PSI run: client_w learns the count (or, in reveal mode, its own shared tokens)."""
+    if reveal and not server_w.consent_reveal:
+        raise CheckError("reveal_needs_both_consents")  # the serving wallet protects its own set
+    client = psi.client.CreateWithNewKey(reveal)
+    items = client_w.padded(client_w.tokens)
+    req = client.CreateRequest(items)
+    relay.send(sid, to_server, "request", req.SerializeToString())
+    server = psi.server.CreateWithNewKey(reveal)
+    setup = server.CreateSetupMessage(FPR, PAD_TO, server_w.padded(server_w.tokens), DataStructure.GCS)
+    resp = server.ProcessRequest(req)
+    relay.send(sid, to_client, "setup", setup.SerializeToString())
+    relay.send(sid, to_client, "response", resp.SerializeToString())
+    if not reveal:
+        return client.GetIntersectionSize(setup, resp)
+    return sorted(client_w.token_to_gene[items[i]] for i in client.GetIntersection(setup, resp)
+                  if items[i] in client_w.token_to_gene)
+
+
 def run_check(a: Wallet, b: Wallet, relay: Relay, period: int, reveal: bool = False) -> dict:
-    """A = PSI client, B = PSI server. Step 1 returns only yes/no; step 2 needs both consents."""
+    """Both wallets verify each other, then each runs PSI as client once and gets its own result."""
     if reveal and not (a.consent_reveal and b.consent_reveal):
         raise CheckError("reveal_needs_both_consents")
     sid = relay.create()
     relay.join(sid)
     relay.send(sid, "b", "hello", a.hello(sid))
     relay.send(sid, "a", "hello", b.hello(sid))
-    b_tokens_claimed = a.verify_partner(relay.recv(sid, "a")[1], sid, period)
+    a.verify_partner(relay.recv(sid, "a")[1], sid, period)
     b.verify_partner(relay.recv(sid, "b")[1], sid, period)
-    del b_tokens_claimed  # verified, but never used for matching: PSI does the matching
-
-    server = psi.server.CreateWithNewKey(reveal)
-    client = psi.client.CreateWithNewKey(reveal)
-    a_items = a.padded(a.token_set.token_set.tokens)
-    setup = server.CreateSetupMessage(FPR, PAD_TO, b.padded(b.token_set.token_set.tokens),
-                                      DataStructure.GCS)
-    relay.send(sid, "a", "setup", setup.SerializeToString())
-    req = client.CreateRequest(a_items)
-    relay.send(sid, "b", "request", req.SerializeToString())
-    resp = server.ProcessRequest(req)
-    relay.send(sid, "a", "response", resp.SerializeToString())
-    if reveal:
-        idx = client.GetIntersection(setup, resp)
-        shared = sorted(a.token_to_gene[a_items[i]] for i in idx if a_items[i] in a.token_to_gene)
-        result = {"shared_risk": bool(shared), "genes": shared}
-    else:
-        n = client.GetIntersectionSize(setup, resp)
-        result = {"shared_risk": n > 0}
-    relay.send(sid, "b", "result", result["shared_risk"])
+    a_view = _round(a, b, relay, sid, reveal, "a", "b")
+    b_view = _round(b, a, relay, sid, reveal, "b", "a")
     relay.close(sid)
-    return result
+    if reveal:
+        return {"shared_risk": bool(a_view), "genes": a_view,
+                "b_shared_risk": bool(b_view), "b_genes": b_view}
+    return {"shared_risk": a_view > 0, "b_shared_risk": b_view > 0}

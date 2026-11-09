@@ -1,7 +1,7 @@
 """Builds labs, the token service and wallets for tests and the evaluation harness."""
 from lab_issuer.core import LabIssuer
 from schemas import signing
-from schemas.models import SignedTokenSet, TokenSet
+from schemas.models import SignedTokenSet, TokenSet, attestation
 from token_service.core import new_service
 
 from sim.eval.protocol import Wallet
@@ -30,4 +30,5 @@ class World:
         sk, _ = signing.generate_keypair()
         ts = TokenSet(period=self.period, holder_pk=w.pk.hex(),
                       tokens=sorted(self.svc.token(g, self.period) for g in genes))
-        return SignedTokenSet(token_set=ts, signature=signing.sign(sk, ts.model_dump()))
+        return SignedTokenSet(token_set=ts, signature=signing.sign(sk, ts.model_dump()),
+                              attestation_signature=signing.sign(sk, attestation(ts.period, ts.holder_pk)))

@@ -29,15 +29,18 @@ def correctness(n: int, seed: int) -> dict:
     genes = load_panel(PANEL)
     couples, _ = generate_couples(n, genes, seed, weights=WEIGHTS)
     w, relay = World(), Relay()
-    missed = false_alarms = positives = 0
+    missed = false_alarms = positives = disagree = 0
     for i, c in enumerate(couples):
         a, b = w.wallet("a", c.a, i), w.wallet("b", c.b, i + 1)  # different labs every time
-        got = run_check(a, b, relay, w.period)["shared_risk"]
+        r = run_check(a, b, relay, w.period)
+        got = r["shared_risk"]
+        disagree += r["shared_risk"] != r["b_shared_risk"]  # each side computes its own result
         truth = bool(c.shared)
         positives += truth
         missed += truth and not got
         false_alarms += got and not truth
     return {"couples": n, "positives": positives, "missed": missed, "false_alarms": false_alarms,
+            "sides_disagree": disagree,
             "incompatible_rate": positives / n, "cross_lab": True,
             "accuracy": 1 - (missed + false_alarms) / n,
             "covered_by_card": _coverage(couples)}

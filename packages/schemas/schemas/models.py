@@ -25,8 +25,15 @@ class TokenSet(BaseModel):
 
 
 class SignedTokenSet(BaseModel):
+    """Kept only on the holder's device. The tokens are never sent to a partner."""
     token_set: TokenSet
-    signature: str
+    signature: str  # national signature over the whole set: lets the holder check its delivery
+    attestation_signature: str = ""  # national signature over attestation(): the only part a partner sees
+
+
+def attestation(period: int, holder_pk: str) -> dict:
+    """What a partner verifies: this device key holds a national token set for this period."""
+    return {"holder_pk": holder_pk, "period": period}
 
 
 PermissionType = Literal["check_only", "reveal_condition", "share_counsellor", "family_invite"]

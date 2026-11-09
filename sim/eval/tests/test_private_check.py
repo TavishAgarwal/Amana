@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from generator import generate_couples, load_panel
 from schemas.logscrub import scrub
@@ -71,3 +73,34 @@ def test_relay_log_scan_clean_and_scrubber():
     assert not any(t in blob for t in a.token_to_gene)
     assert scrub("x HBB " + "a" * 64, {"HBB"}) == "x [gene] [token]"
     assert r.sessions == {}
+
+
+def test_hello_carries_no_tokens():
+    """A partner must not be able to match tokens directly and skip the count-only step."""
+    w = World()
+    a = w.wallet("a", P("a", ["HBB", "PAH", "CFTR"]))
+    hello = json.dumps(a.hello("sid-1"))
+    assert all(tok not in hello for tok in a.tokens)
+    assert set(a.hello("sid-1")) == {"period", "holder_pk", "attestation", "proof"}
+
+
+def test_each_side_computes_its_own_result():
+    w = World()
+    for a_genes, b_genes in [(["HBB", "GJB2"], ["HBB", "PAH"]), (["PAH"], []), (["CFTR"], ["HBB"])]:
+        a, b = w.wallet("a", P("a", a_genes)), w.wallet("b", P("b", b_genes), 1)
+        r = run_check(a, b, Relay(), w.period)
+        assert r["shared_risk"] == r["b_shared_risk"] == bool(set(a_genes) & set(b_genes))
+        a.consent_reveal = b.consent_reveal = True
+        r = run_check(a, b, Relay(), w.period, reveal=True)
+        assert r["genes"] == r["b_genes"] == sorted(set(a_genes) & set(b_genes))
+
+
+def test_serving_wallet_without_consent_refuses_reveal():
+    from sim.eval.protocol import _round
+    w = World()
+    a, b = w.wallet("a", P("a", ["HBB"])), w.wallet("b", P("b", ["HBB"]), 1)
+    a.consent_reveal = True  # b has not agreed: b must not answer a's reveal request
+    relay = Relay()
+    sid = relay.create()
+    with pytest.raises(CheckError, match="reveal_needs_both_consents"):
+        _round(a, b, relay, sid, True, "a", "b")

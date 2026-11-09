@@ -5,7 +5,7 @@ import time
 from dataclasses import dataclass, field
 
 from schemas import signing
-from schemas.models import SignedCredential, SignedTokenSet, TokenSet
+from schemas.models import SignedCredential, SignedTokenSet, TokenSet, attestation
 
 PERIOD_SECONDS = 7 * 24 * 3600
 
@@ -82,7 +82,8 @@ class TokenService:
             tokens=sorted(self.token(g, period) for g in set(genes)),
         )
         return SignedTokenSet(
-            token_set=ts, signature=signing.sign(self.signing_key, ts.model_dump())
+            token_set=ts, signature=signing.sign(self.signing_key, ts.model_dump()),
+            attestation_signature=signing.sign(self.signing_key, attestation(period, holder_pk)),
         )
 
     def verify_token_set(self, signed: SignedTokenSet, now: float | None = None) -> bool:
