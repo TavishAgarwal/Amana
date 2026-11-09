@@ -3,13 +3,16 @@
 // Wallet A is the client and wallet B the server. Sets are padded to PAD_TO so set size leaks nothing.
 export const PAD_TO = 128, FPR = 1e-9;
 
-type Psi = Awaited<ReturnType<typeof load>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Psi = any;
 let cached: Promise<Psi> | undefined;
-async function load() {
-  const mod = (await import("@openmined/psi.js/psi_wasm_web")) as unknown as { default: () => Promise<any> };
+let loader = async (): Promise<Psi> => {
+  const mod = (await import("@openmined/psi.js/psi_wasm_web")) as unknown as { default: () => Promise<Psi> };
   return mod.default();
-}
-export const getPsi = () => (cached ??= load());
+};
+/** Tests use the Node build of the same library. */
+export const setPsiLoader = (f: () => Promise<Psi>) => { loader = f; cached = undefined; };
+export const getPsi = () => (cached ??= loader());
 
 const randomToken = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
 export const pad = (tokens: string[]) => [...tokens, ...Array.from({ length: PAD_TO - tokens.length }, randomToken)];

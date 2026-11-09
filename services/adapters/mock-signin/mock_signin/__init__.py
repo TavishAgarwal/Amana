@@ -6,7 +6,8 @@ from fastapi import FastAPI, HTTPException
 from schemas import signing
 
 ISSUER = os.environ.get("SIGNIN_ISSUER", "http://localhost:9000")
-PERSONAS = {"mariam": "Mariam (synthetic)", "khalid": "Khalid (synthetic)"}  # no real IDs
+PERSONAS = {"mariam": "Mariam (synthetic)", "khalid": "Khalid (synthetic)",
+            "noura": "Noura (synthetic)", "omar": "Omar (synthetic)"}  # no real IDs
 _sk, _pk = signing.generate_keypair()
 _codes: dict[str, str] = {}
 api = FastAPI(title="Mock sign-in")

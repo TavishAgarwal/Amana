@@ -3,7 +3,7 @@ import jsQR from "jsqr";
 import { useEffect, useRef, useState } from "react";
 import { t } from "@/lib/i18n";
 
-const PAIR = /^amana:\/\/pair\/[0-9a-f]{12}$/;
+const PAIR = /^amana:\/\/pair\/[A-Za-z0-9_-]{16,64}$/;
 
 // Reads a pairing QR with the camera. Frames are decoded on the device and never uploaded or stored.
 export default function Scanner({ locale, onCode }: { locale: string; onCode: (code: string) => void }) {

@@ -1,12 +1,12 @@
 "use client";
 import { use, useEffect, useState } from "react";
-import { post, usePersona } from "@/lib/api";
+import { post } from "@/lib/api";
+import { loadWallet, signedRequest, wipeDevice } from "@/lib/device";
 import { t } from "@/lib/i18n";
 import * as vault from "@/lib/vault";
 
 export default function Settings({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
-  const [me] = usePersona();
   const [done, setDone] = useState(false);
   const [lockOn, setLockOn] = useState(false);
   const [pin, setPin] = useState("");
@@ -20,7 +20,7 @@ export default function Settings({ params }: { params: Promise<{ locale: string 
         <p><button type="submit" disabled={pin.length < 4}>{t(locale, "save_pin")}</button></p></form>)}
       {lockOn && <button className="secondary" onClick={() => { vault.wipe(); setLockOn(false); }}>{t(locale, "remove_lock")}</button>}
     </div>
-    <button onClick={async () => { await post(`/api/delete/${me}`); vault.wipe(); setLockOn(false); setDone(true); }}>{t(locale, "delete")}</button>
+    <button onClick={async () => { if (await loadWallet()) await post("/api/withdraw", await signedRequest("withdraw_all")); await wipeDevice(); vault.wipe(); setLockOn(false); setDone(true); }}>{t(locale, "delete")}</button>
     {done && <p role="status">{t(locale, "done")}</p>}
   </>);
 }

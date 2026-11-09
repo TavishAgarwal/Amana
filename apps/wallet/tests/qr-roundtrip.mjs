@@ -1,7 +1,7 @@
 // Generates a pairing QR with `qrcode` and decodes it with `jsqr`, the same libraries the wallet uses.
 import QRCode from "qrcode";
 import jsQR from "jsqr";
-const text = "amana://pair/d83786bc44b3";
+const text = "amana://pair/sYobUMm_s9fCbLbn6LaWiw";  // a relay session id, as the wallet shows it
 const qr = QRCode.create(text, { errorCorrectionLevel: "M" });
 const n = qr.modules.size, scale = 8, quiet = 4, size = (n + quiet * 2) * scale;
 const data = new Uint8ClampedArray(size * size * 4).fill(255);
