@@ -1,7 +1,7 @@
 # 🛠️ PROJECT REVIEW: AMANA, status on 9 Nov 2026
 
 > **Score if submitted today: 48/100.** Judged on the six official criteria, equal weights (none are published).
-> **After fixes 1–2 (applied 9 Nov, uncommitted): about 50/100.** Estimate from the fixes' listed gains, not a full re-score.
+> **After fixes 1–2 (9 Nov): about 50/100.** **After fixes 3–4 (9 Nov, uncommitted): about 53/100** (Tech 7 · Demo 4.5 · RAI 6.5; others unchanged). Estimates, not a full re-score. Fix 3's full gain needs real phones, which needs HTTPS and comes with deployment (fix 5).
 > **Projected at the deadline if the top 8 fixes land: about 69/100.** The idea was projected at 68.
 > **Reviewed:** git `main` at `1dae2f8` (23 commits, all 9 Nov 00:41–01:41, about 8,200 lines). Six commits are **not pushed** to `github.com/TavishAgarwal/Amana`.
 > **Method:** read the code and docs; ran every test suite, lint and both production builds; started the demo API and probed every endpoint with curl. **Not checked:** the UI in a browser (only API and build checked), real phones, GitHub CI runs (`gh` not installed).
@@ -45,10 +45,11 @@
 
 | ID | Severity | Finding | Evidence | Hurts |
 |---|---|---|---|---|
-| **C1** | 🔴 Critical | **The running demo contradicts the core privacy claim.** Both "wallets" live inside one server process, which holds every persona's keys and genes. Anyone can read anyone's carrier genes with no sign-in. | `services/demo-api/demo_api/app.py:24-46`; `curl /api/result/khalid` → `HBB, PAH` | Tech, RAI, Impact |
-| **C2** | 🔴 Critical | **Consent can be given on someone else's behalf.** Reveal consent is a persona name in a POST body; anyone can "consent" as Khalid and unlock the reveal. | `app.py:113-127`; `POST /api/reveal/consent {"persona":"khalid"}` → returned genes | RAI |
+| **C1** | ✅ Fixed 9 Nov | **The running demo contradicts the core privacy claim.** Both "wallets" live inside one server process, which holds every persona's keys and genes. Anyone can read anyone's carrier genes with no sign-in. | `services/demo-api/demo_api/app.py:24-46`; `curl /api/result/khalid` → `HBB, PAH` | Tech, RAI, Impact |
+| **C2** | ✅ Fixed 9 Nov | **Consent can be given on someone else's behalf.** Reveal consent is a persona name in a POST body; anyone can "consent" as Khalid and unlock the reveal. | `app.py:113-127`; `POST /api/reveal/consent {"persona":"khalid"}` → returned genes | RAI |
+| **C13** | ✅ Found and fixed 9 Nov | **Protocol flaw: the hello leaked every token to the partner**, letting a partner match directly and skip the count-only step and both consents | old `sim/eval/protocol.py` `Wallet.hello` | Tech, RAI |
 | **C3** | ✅ Fixed 9 Nov | **The wallet production build fails**, so the wallet can't be deployed and CI lint fails. | `pnpm -C apps/wallet build` → `lib/psi.ts(9,29): error TS7016` | Demo |
-| **C4** | 🟠 High | **No two-phone check.** One device chooses both people from a dropdown; the QR code isn't used to join a session; the Node relay (`services/relay/src/server.js`) isn't used by the wallet. Browser PSI exists but isn't wired in. | `apps/wallet/app/[locale]/pair/page.tsx`, `check/page.tsx` | Demo, Tech |
+| **C4** | ✅ Fixed 9 Nov (laptop; real phones need HTTPS) | **No two-phone check.** One device chooses both people from a dropdown; the QR code isn't used to join a session; the Node relay (`services/relay/src/server.js`) isn't used by the wallet. Browser PSI exists but isn't wired in. | `apps/wallet/app/[locale]/pair/page.tsx`, `check/page.tsx` | Demo, Tech |
 | **C5** | 🟠 High | **No AI is running.** Card rewording is off (no Azure OpenAI), the counsellor "copilot summary" is a fixed template, and the Q&A refuses even "what is thalassaemia?" in English and Arabic. The responsible-AI criterion has no AI to govern. | `docs/model-card.md`; `POST /api/ask` | RAI, Tech |
 | **C6** | 🟠 High | **Nothing deployed; no video, no deck.** Judges can't open a link; `deploy-staging.yml` is a stub. | `docs/deployment-guide.md`, `pitch/` | Demo, Scale |
 | **C7** | 🟠 High | **No human evidence:** no user test, no clinician review, no native-speaker review, no second red-team reviewer. Understanding and fairness, the main impact metrics, are "not run". | `sim/eval/results.json` | Impact, RAI |
@@ -56,7 +57,7 @@
 | **C9** | ✅ Fixed in docs 9 Nov | **The panel has 111 genes, not 570**, and card coverage is 51.7% of simulated incompatible couples. Fine if stated; wrong if the pitch says "570 genes". | `packs/abu-dhabi/panel.csv` (113 lines) | Impact |
 | **C10** | 🟡 Medium | **Commercial case is thin:** no price per screened person, no market size, no buyer journey. | `pitch/pilot-proposal.md` | Commercial |
 | **C11** | 🟢 Low | **Six commits not pushed**; CI on GitHub hasn't run on the latest code. | `git status` | Demo |
-| **C12** | 🟢 Low | **The step-1 yes/no result passes through the server**, so a cheating client could lie (listed as a known gap). | `docs/threat-model.md` | Tech |
+| **C12** | ✅ Fixed 9 Nov | **The step-1 yes/no result passes through the server**, so a cheating client could lie (listed as a known gap). | `docs/threat-model.md` | Tech |
 
 ---
 
@@ -85,7 +86,13 @@
 | 2 (C8) | Re-ran the evaluation harness: results reproduced exactly. `evaluation-report.md` now copies `results.json` (271 incompatible, 5.42%, 24.9 ms). `cost-model.md` uses 24.9 ms and 0.69 core-hours. `data-map.md` rewritten: real ClinVar panel, gnomAD frequencies, CTGA not used, and an honest note that the current demo keeps genes on the server | Harness exit 0; numbers grep-checked across `docs/`, `pitch/`, `README.md` |
 | 2 (C9) | "570 genes" kept only where it describes the real programme. Prototype wording says "every gene on the panel" or `{n}` from the country pack (111). Test renamed `test_forged_all_panel_genes_rejected`. `limitations.md` states the 111 vs 570 gap | 33 Python tests pass |
 
+| 3 (C1, C4, C12) | Check moved onto the devices. Result and tokens delivered once per device key after mock sign-in, kept encrypted in IndexedDB; browser `psi.js` over the Node relay; the QR carries the relay session; check runs once in each direction so each phone computes its own answer; one count and one reveal request per session. Demo API keeps no wallets; gene endpoints removed | `check.test.mjs` (two wallets over the real relay), `device.test.mjs`, demo-api tests, harness (5,000 couples, both sides agree on all), two-tab browser run: both "shared", reveal HBB only after both agreed, server log shows no check traffic |
+| 4 (C2) | Every consent, revoke and log read is signed by the device key (non-extractable Ed25519); the server verifies it | `test_consent_must_be_signed_by_the_holder`, `sign-interop.test.mjs` (Python ↔ browser), forged consent → 403 |
+| C13 (new) | Found while doing fix 3: the old hello sent the full token set to the partner, who could match tokens directly and skip the count-only step and both consents. Hello now carries only a national attestation and a session signature | `test_hello_carries_no_tokens`; relay traffic scanned for tokens in `check.test.mjs` |
+
 C11 (unpushed commits) is still open: nothing was pushed.
+
+**Still open after fixes 3–4:** real two-phone test (needs HTTPS + `wss://`, fix 5); count-only PSI lets a partner submit one of its own genes to test it within a session (limited by one request per session and in-person pairing; listed in `docs/threat-model.md`).
 
 ## 6. Run log
 
@@ -98,4 +105,5 @@ C11 (unpushed commits) is still open: nothing was pushed.
 | `pnpm -C apps/wallet build` | **Failed**: TS7016 |
 | `pnpm -C apps/console build` | Passed |
 | Demo API probes (port 18765) | Results in §3 (C1, C2, C5) and §2 |
-| After fixes, 9 Nov: ruff · pytest · pnpm lint · pnpm test · both builds | All pass (33 Python, 13 JS tests) |
+| After fixes 1–2, 9 Nov: ruff · pytest · pnpm lint · pnpm test · both builds | All pass (33 Python, 13 JS tests) |
+| After fixes 3–4, 9 Nov: same, plus harness re-run and two-tab browser run | All pass (40 Python, 21 JS tests); harness 0 missed, 0 false alarms, 0 disagreements, 45.7 ms per two-way check |

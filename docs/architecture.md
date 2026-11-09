@@ -125,32 +125,38 @@ sequenceDiagram
   B->>R: Scan QR, join session
   A->>L: Permission "check only" (signed)
   B->>L: Permission "check only" (signed)
-  A->>R: Token-set signature + period
+  A->>R: Hello: national attestation (period + device key) + signature over session id
   R->>B: forward
-  B->>R: Token-set signature + period
+  B->>R: Hello (same shape). Tokens are never sent
   R->>A: forward
-  A->>A: Verify B's token-set signature
-  B->>B: Verify A's token-set signature
-  Note over A,B: Step 1: count-only private set intersection
-  A->>R: Scrambled request
+  A->>A: Verify B's attestation, period and session signature
+  B->>B: Verify A's attestation, period and session signature
+  Note over A,B: Step 1: count-only private set intersection, run once in each direction
+  A->>R: Scrambled request (A as client)
   R->>B: forward
   B->>R: Scrambled response + scrambled set
   R->>A: forward
-  A->>A: Result = number of shared genes (shown as yes / no)
-  A->>R: Result shared with B
+  A->>A: A computes its own yes / no
+  B->>R: Scrambled request (B as client)
+  R->>A: forward
+  A->>R: Scrambled response + scrambled set
   R->>B: forward
+  B->>B: B computes its own yes / no
   R->>R: Session closed and discarded
 ```
 
 **Step 2: reveal which condition (only if both agree)**
 1. Both people tap "show which condition".
-2. Each wallet writes a "reveal condition" permission to the ledger.
-3. The check runs again in **intersection mode**: each wallet learns which of **its own** tokens are shared, and maps them back to genes it already knows.
+2. Each wallet sends the partner a consent signed with its device key, and writes a signed "reveal condition" permission to the ledger.
+3. The check runs again in **intersection mode**, once in each direction: each wallet learns which of **its own** tokens are shared, and maps them back to genes it already knows. A wallet answers a reveal request only after both signed consents.
 4. The wallet shows the condition card and offers a counsellor (Tier 3).
 
 **Why a cheat fails (I-F8):**
 - An attacker who claims every gene on the panel cannot produce valid tokens for genes they don't carry, because tokens need the national key.
-- A forged or altered token set fails the signature check before the check runs.
+- A forged attestation, an old period or a replayed hello fails before any matching starts.
+- Tokens never leave the phone, so a partner cannot compare tokens directly and skip the consent steps.
+- Each phone answers at most one count request and one reveal request per session, so a partner cannot re-ask with single genes.
+- Each phone computes its own result, so neither can lie to the other about yes or no.
 - The demo shows both rejections with the logged reason.
 
 ### 2.4 Counselling

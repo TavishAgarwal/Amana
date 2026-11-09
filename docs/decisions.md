@@ -30,3 +30,12 @@ Format: date, decision, reason, owner.
 - Variants above 2% pooled frequency are excluded (VPS13B c.9331-1G>T at 11%, a sequencing artefact; CFTR 5T at 2.9%, a variable-penetrance allele).
 - The generator uses these as relative weights and still calibrates the absolute scale to the 4.8% target. The uncalibrated implied rate (3.98%) is reported in `results.json` as a cross-check.
 - CTGA (cags.org.ae) was looked at but not used or scraped: it is bibliographic, has no frequencies, and no terms of use were found.
+
+## 2026-11-09: Check moved onto the devices (review fixes 3–4)
+- Found while moving the check: the old hello sent each wallet's full token set to the partner, who could then match tokens directly and skip the count-only step and both consents. **Fixed:** the hello now carries only a national attestation (period + device key, signed by the token service) and a signature over the session id.
+- The check runs once in each direction; each phone computes its own yes/no (closes the "a client could lie" gap).
+- Each phone answers at most one count and one reveal request per session.
+- Results are delivered once to a device key after mock sign-in, stored encrypted in IndexedDB with a non-extractable AES-GCM key; the device key is non-extractable Ed25519 (WebCrypto).
+- Demo API no longer holds wallets; `/api/result`, `/api/check`, `/api/pair`, `/api/reveal/consent`, `/api/share`, `/api/delete` removed. Consents, revokes and log reads must carry a device-key signature.
+- Wallet API address is configurable (`AMANA_API`), and the relay address too (`NEXT_PUBLIC_RELAY_URL`, default `ws(s)://<host>:8080`).
+- Each check now costs two PSI runs instead of one; evaluation re-run.

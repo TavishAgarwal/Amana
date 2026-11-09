@@ -13,5 +13,13 @@
 | Unauthorised access to a case | Default deny; signed, expiring, revocable permissions; every attempt audited | `test_ledger.py` |
 | Log tampering | Hash-chained audit; Postgres trigger blocks UPDATE/DELETE | chain and Postgres tests |
 | Unsupported or directive AI output | Cards only; fact-checker; fallback to original card | red-team set, `test_explainer.py` |
+| Partner reads tokens from the hello and matches them directly, skipping the count-only step and consent (found and fixed 9 Nov) | Hello carries only the national attestation (period + device key) and a session signature; tokens never leave the phone | `test_hello_carries_no_tokens`; wallet `check.test.mjs` scans everything sent through the relay |
+| Partner lies about the yes/no result | Each phone runs PSI as client once and computes its own result | `test_each_side_computes_its_own_result`; `check.test.mjs` |
+| Partner re-asks with single genes to learn which of its genes match | One count and one reveal request answered per session; new session needs a new in-person QR | `check.test.mjs` "second count request refused" |
+| Someone consents, revokes or reads a log on another person's behalf | Every consent, revoke and log read is signed by the holder's device key (non-extractable, on the phone) | `test_consent_must_be_signed_by_the_holder`, `test_share_case_signoff_revoke_withdraw`, `sign-interop.test.mjs` |
 
-**Known gaps:** step 1 result is relayed by the PSI client to the server, so a malicious client could lie about yes/no; the Python reference wallet is not the browser wallet; the national key is a local value in dev, not yet in Key Vault.
+**Known gaps:**
+- Count-only PSI lets the client choose its own input, so within one session a partner could submit only one of the genes it carries and learn whether that one is shared. One request per session and in-person pairing limit this; a malicious-secure protocol would close it.
+- The national key is a local value in dev, not yet in Key Vault.
+- Mock sign-in lets anyone pick any demo persona (a real national-ID provider replaces it).
+- Device keys and the encrypted wallet live in browser storage: protected from other sites and casual access, not from someone who copies the whole browser profile.
