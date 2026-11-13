@@ -1,0 +1,529 @@
+{
+ "summary": {
+  "date": "2026-11-10",
+  "axe": "4.14.0",
+  "screens_scanned": 58,
+  "wcag_violations": 0,
+  "best_practice_issues": 0,
+  "text_200_sideways_scroll": [],
+  "screens_with_small_targets": 0
+ },
+ "wcag": [],
+ "other": [],
+ "results": [
+  {
+   "app": "wallet",
+   "path": "/en/welcome (step 1)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/welcome (step 1)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/welcome (step 1)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/welcome (step 1)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/welcome (sign in)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/welcome (sign in)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/beta-thalassaemia",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/beta-thalassaemia",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/beta-thalassaemia",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/carrier-basics",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/carrier-basics",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/card/carrier-basics",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help/invite",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help/invite",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/help/invite",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/pair",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/pair",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/pair",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/settings",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/settings",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/settings",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/sharing",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/sharing",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/sharing",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/study",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/study",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/study",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/beta-thalassaemia",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/beta-thalassaemia",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/beta-thalassaemia",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/carrier-basics",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/carrier-basics",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/card/carrier-basics",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help/invite",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help/invite",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/help/invite",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/pair",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/pair",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/pair",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/settings",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/settings",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/settings",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/sharing",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/sharing",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/sharing",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/study",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/study",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/study",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "console",
+   "path": "/en/queue",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/queue",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/queue (case open)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/queue (case open)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/dashboard",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/dashboard",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/attack-demo",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/en/attack-demo",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/queue",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/queue",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/queue (case open)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/queue (case open)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/dashboard",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/dashboard",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/attack-demo",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "console",
+   "path": "/ar/attack-demo",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  }
+ ]
+}

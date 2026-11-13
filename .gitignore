@@ -12,3 +12,5 @@ data/raw/
 .pytest_cache/
 .ruff_cache/
 *.tsbuildinfo
+loadtest/.out/
+.next-lan/

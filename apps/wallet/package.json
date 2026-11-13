@@ -5,7 +5,8 @@
     "dev": "next dev -p 3010",
     "build": "next build",
     "lint": "tsc --noEmit",
-    "test": "node --no-warnings --experimental-strip-types --test tests/*.test.mjs && node tests/qr-roundtrip.mjs"
+    "test": "node --no-warnings --experimental-strip-types --test tests/*.test.mjs && node tests/qr-roundtrip.mjs",
+    "dev:lan": "AMANA_DEV_ORIGINS=$AMANA_LAN_IP next dev -H 0.0.0.0 -p 3010 --experimental-https --experimental-https-key ../../.local/certs/key.pem --experimental-https-cert ../../.local/certs/cert.pem"
   },
   "dependencies": {
     "@amana/ui": "workspace:*",
@@ -16,6 +17,7 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@huggingface/transformers": "3",
     "@openmined/psi.js": "^2.0.6",
     "@types/node": "^26.6.6",
     "@types/qrcode": "^1.5.6",

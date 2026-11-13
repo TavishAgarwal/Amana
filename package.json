@@ -8,6 +8,14 @@
   "scripts": {
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
-    "db:up": "docker compose up -d postgres"
+    "db:up": "docker compose up -d postgres",
+    "a11y": "node scripts/a11y.mjs",
+    "e2e": "node scripts/e2e.mjs",
+    "stack": "docker compose -f docker-compose.stack.yml up --build",
+    "load": "loadtest/run.sh",
+    "two-phones": "scripts/two-phones.sh"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.0"
   }
 }
