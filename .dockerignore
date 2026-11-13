@@ -1,0 +1,15 @@
+**/node_modules
+**/.next
+**/__pycache__
+**/*.tsbuildinfo
+.venv
+.git
+.local
+.env
+data/raw
+sim/data
+loadtest/.out
+blaze
+pitch/video
+.ruff_cache
+.pytest_cache

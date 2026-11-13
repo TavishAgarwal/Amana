@@ -1,9 +1,43 @@
 name: deploy-staging
+# Manual only. Builds the four images, pushes them to Azure Container Registry and deploys
+# infra/azure/main.bicep to a UAE region. Costs money once it runs; nothing runs on push.
+# Needs (GitHub environment "staging"):
+#   secrets AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID  (OIDC federated credential, no passwords)
+#   vars    AZURE_RG, ACR_NAME, RELAY_URL (wss://… from the first deploy's output), CONSOLE_CIDRS (JSON array)
 on:
   workflow_dispatch:
-# Filled in once Azure UAE North resources exist (P0, owner C).
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  noop:
+  deploy:
     runs-on: ubuntu-latest
+    environment: staging
     steps:
-      - run: echo "staging deploy not configured yet"
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Build and push images
+        env:
+          ACR: ${{ vars.ACR_NAME }}
+          TAG: ${{ github.sha }}
+          RELAY_URL: ${{ vars.RELAY_URL }}
+        run: |
+          az acr login -n "$ACR"
+          R="$ACR.azurecr.io"
+          docker build -f infra/docker/api.Dockerfile -t "$R/amana-api:$TAG" .
+          docker build -f infra/docker/relay.Dockerfile -t "$R/amana-relay:$TAG" .
+          docker build -f infra/docker/web.Dockerfile --build-arg APP=wallet \
+            --build-arg AMANA_API=http://amana-api --build-arg NEXT_PUBLIC_RELAY_URL="$RELAY_URL" -t "$R/amana-wallet:$TAG" .
+          docker build -f infra/docker/web.Dockerfile --build-arg APP=console \
+            --build-arg AMANA_API=http://amana-api -t "$R/amana-console:$TAG" .
+          for i in api relay wallet console; do docker push "$R/amana-$i:$TAG"; done
+      - name: Deploy
+        run: |
+          az deployment group create -g "${{ vars.AZURE_RG }}" -f infra/azure/main.bicep \
+            -p acrName="${{ vars.ACR_NAME }}" imageTag="${{ github.sha }}" \
+               consoleAllowedCidrs='${{ vars.CONSOLE_CIDRS || '[]' }}' \
+            --query properties.outputs

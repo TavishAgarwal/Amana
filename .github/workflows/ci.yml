@@ -28,3 +28,11 @@ jobs:
       - run: pnpm install
       - run: pnpm lint
       - run: pnpm test
+  infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: az bicep install && az bicep build -f infra/azure/main.bicep --stdout > /dev/null
+      - run: docker compose -f docker-compose.stack.yml config -q
+      - run: docker build -f infra/docker/api.Dockerfile -t amana-api .
+      - run: docker build -f infra/docker/relay.Dockerfile -t amana-relay .

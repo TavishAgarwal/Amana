@@ -1,0 +1,39 @@
+# The whole demo in containers, on ports that don't clash with the dev servers:
+#   wallet http://localhost:3030 · console http://localhost:3031 · relay ws://localhost:18081
+# Run: docker compose -f docker-compose.stack.yml up --build
+# AI: set AMANA_LLM_URL=http://host.docker.internal:11434/v1 to use Ollama on this machine (off if unset).
+name: amana-stack
+services:
+  api:
+    build: { context: ., dockerfile: infra/docker/api.Dockerfile }
+    environment:
+      APP: demo
+      AMANA_LLM_URL: ${AMANA_LLM_URL:-}
+      AMANA_LLM_MODEL: ${AMANA_LLM_MODEL:-llama3.1:8b}
+    extra_hosts: ["host.docker.internal:host-gateway"]
+  token:
+    build: { context: ., dockerfile: infra/docker/api.Dockerfile }
+    environment:
+      APP: token
+      PORT: "8001"
+      NATIONAL_TOKEN_KEY_FILE: /keys/national.json
+    volumes: [tokenkeys:/keys]
+  relay:
+    build: { context: ., dockerfile: infra/docker/relay.Dockerfile }
+    ports: ["18081:8080"]
+  wallet:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+      args: { APP: wallet, AMANA_API: "http://api:8000", NEXT_PUBLIC_RELAY_URL: "ws://localhost:18081" }
+    ports: ["3030:3000"]
+    depends_on: [api, relay]
+  console:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+      args: { APP: console, AMANA_API: "http://api:8000" }
+    ports: ["3031:3000"]
+    depends_on: [api]
+volumes:
+  tokenkeys:
