@@ -1,0 +1,8 @@
+This folder holds a cut-down copy of the model sentence-transformers/static-similarity-mrl-multilingual-v1
+(https://huggingface.co/sentence-transformers/static-similarity-mrl-multilingual-v1), licensed under the
+Apache License, Version 2.0 (LICENSE.txt in this folder).
+
+Changes made for AMANA by scripts/build-ask-model.mjs:
+- only tokens in Latin, Arabic or Greek script (plus digits, punctuation, symbols and special tokens) are kept;
+- each token vector is cut to its first 64 dimensions (the model was trained for this, Matryoshka);
+- vectors are stored as 8-bit integers with one scale per token.

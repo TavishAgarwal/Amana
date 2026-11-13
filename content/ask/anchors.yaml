@@ -1,0 +1,13 @@
+# Matching hints for on-device question answering. Never shown to anyone: they only help the phone
+# decide which part of a reviewed card a question is about. One entry per card section.
+# Generic on purpose (no condition-specific facts), so they cannot add medical content.
+en:
+  what: "What is it? What is this condition? What does it affect? Which part of the body?"
+  carrier: "Am I sick? Will I have symptoms myself? Does being a carrier make me ill? What does being a carrier mean?"
+  both: "What is the chance for our children or our baby? Will our kids get it? What is the risk for each pregnancy if we both carry it? What if only one of us carries it? Are relatives or cousins more likely to carry it?"
+  options: "What can we do? What are our options and choices? Who decides? What should happen next? Can a counsellor help?"
+ar:
+  what: "ما هي؟ ما هذه الحالة؟ على ماذا تؤثر؟ أي جزء من الجسم؟"
+  carrier: "هل أنا مريض؟ هل ستظهر علي أعراض؟ هل كوني حاملاً يجعلني مريضاً؟ ماذا يعني أن أكون حاملاً؟"
+  both: "ما احتمال إصابة أطفالنا أو طفلنا؟ هل سيصاب أولادنا؟ ما الاحتمال في كل حمل إذا كنا حاملين؟ ماذا لو كان أحدنا فقط حاملاً؟ هل الأقارب وأبناء العم أكثر احتمالاً لحمل التغيير؟"
+  options: "ماذا يمكننا أن نفعل؟ ما الخيارات المتاحة لنا؟ من يقرر؟ ما الخطوة التالية؟ هل يمكن للمستشار أن يساعد؟"

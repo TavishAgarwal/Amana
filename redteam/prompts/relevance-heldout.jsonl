@@ -1,0 +1,24 @@
+{"lang":"en","q":"Explain thalassaemia to me in simple terms","card":["beta-thalassaemia","alpha-thalassaemia"],"expect":"haemoglobin"}
+{"lang":"en","q":"I'm a carrier of Gaucher. Am I ill?","card":["gaucher"],"expect":"does not mean you have symptoms"}
+{"lang":"en","q":"My fiancé and I both carry the CFTR change. What's the risk for a baby?","card":["cystic-fibrosis"],"expect":"1 in 4"}
+{"lang":"en","q":"Which condition is linked to the thyroid?","card":["pendred"],"expect":"thyroid"}
+{"lang":"en","q":"What is Tay-Sachs?","card":["tay-sachs"],"expect":"enzyme"}
+{"lang":"en","q":"Is there anything we can choose to do if both of us carry Wilson disease?","card":["wilson"],"expect":"Options include"}
+{"lang":"en","q":"Does my brother need to worry?","card":["carrier-basics"],"expect":"Relatives"}
+{"lang":"en","q":"Can a counsellor explain our options?","card":["carrier-basics"],"expect":"counsellor"}
+{"lang":"en","q":"My partner is not a carrier but I am. Can our children be sick?","card":["carrier-basics"],"expect":"only one parent"}
+{"lang":"en","q":"What does PKU do to the body?","card":["phenylketonuria"],"expect":"phenylalanine"}
+{"lang":"en","q":"Does it affect me if I only carry it?","card":["familial-mediterranean-fever"],"hint":"familial-mediterranean-fever","expect":"does not mean you have symptoms"}
+{"lang":"en","q":"What could happen to our baby?","card":["galactosaemia"],"hint":"galactosaemia","expect":"1 in 4"}
+{"lang":"ar","q":"اشرح لي الثلاسيميا بكلمات بسيطة","card":["beta-thalassaemia","alpha-thalassaemia"],"expect":"هيموغلوبين"}
+{"lang":"ar","q":"أنا حامل لداء غوشيه، هل أنا مريض؟","card":["gaucher"],"expect":"لا يعني"}
+{"lang":"ar","q":"خطيبي وأنا نحمل تغيير CFTR، ما الخطر على الطفل؟","card":["cystic-fibrosis"],"expect":"1 من كل 4"}
+{"lang":"ar","q":"ما الحالة المرتبطة بالغدة الدرقية؟","card":["pendred"],"expect":"الدرقية"}
+{"lang":"ar","q":"ما هو داء تاي ساكس؟","card":["tay-sachs"],"expect":"الإنزيمات"}
+{"lang":"ar","q":"هل يمكننا اختيار شيء إذا كنا نحمل داء ويلسون؟","card":["wilson"],"expect":"تشمل الخيارات"}
+{"lang":"ar","q":"هل يجب أن يقلق أخي؟","card":["carrier-basics"],"expect":"الأقارب"}
+{"lang":"ar","q":"هل يستطيع المستشار شرح خياراتنا؟","card":["carrier-basics"],"expect":"المستشار"}
+{"lang":"ar","q":"شريكي ليس حاملاً لكني حامل، هل يمرض أطفالنا؟","card":["carrier-basics"],"expect":"أحد الوالدين فقط"}
+{"lang":"ar","q":"ماذا تفعل بيلة الفينيل كيتون بالجسم؟","card":["phenylketonuria"],"expect":"فينيل ألانين"}
+{"lang":"ar","q":"هل يؤثر علي إذا كنت أحمله فقط؟","card":["familial-mediterranean-fever"],"hint":"familial-mediterranean-fever","expect":"لا يعني"}
+{"lang":"ar","q":"ماذا قد يحدث لطفلنا؟","card":["galactosaemia"],"hint":"galactosaemia","expect":"1 من كل 4"}

@@ -1,0 +1,40 @@
+{"lang":"en","q":"What is cystic fibrosis?","card":["cystic-fibrosis"],"expect":"lungs and digestion"}
+{"lang":"en","q":"Does being a PKU carrier make me sick?","card":["phenylketonuria"],"expect":"does not mean you have symptoms"}
+{"lang":"en","q":"What are the chances our baby gets SMA if we both carry it?","card":["spinal-muscular-atrophy"],"expect":"1 in 4"}
+{"lang":"en","q":"Which condition is about the body handling copper?","card":["wilson"],"expect":"copper"}
+{"lang":"en","q":"Is there a condition that causes repeated fevers and pain?","card":["familial-mediterranean-fever"],"expect":"fever and pain"}
+{"lang":"en","q":"Tell me about the hearing loss condition","card":["hereditary-hearing-loss","pendred"],"expect":"hearing loss"}
+{"lang":"en","q":"What does the sugar galactose have to do with my result?","card":["galactosaemia"],"expect":"galactose"}
+{"lang":"en","q":"My result mentions ammonia. What is that condition?","card":["citrullinemia"],"expect":"ammonia"}
+{"lang":"en","q":"What is the condition where fats build up in organs?","card":["gaucher"],"expect":"fats"}
+{"lang":"en","q":"Which condition affects the adrenal glands?","card":["congenital-adrenal-hyperplasia"],"expect":"adrenal"}
+{"lang":"en","q":"What happens with the vitamin biotin?","card":["biotinidase-deficiency"],"expect":"biotin"}
+{"lang":"en","q":"What can we do if we both carry the HBB change?","card":["beta-thalassaemia"],"expect":"Options include"}
+{"lang":"en","q":"Who makes the decision about what to do?","card":["carrier-basics"],"expect":"decision is yours"}
+{"lang":"en","q":"Are my cousins more likely to carry the same change?","card":["carrier-basics"],"expect":"cousins"}
+{"lang":"en","q":"If only one of us is a carrier, can our children have the condition?","card":["carrier-basics"],"expect":"only one parent"}
+{"lang":"en","q":"What does being a carrier mean?","card":["carrier-basics"],"expect":"one changed copy"}
+{"lang":"en","q":"Will my kids get it?","card":["carrier-basics"],"hint":"wilson","expect":"parent"}
+{"lang":"en","q":"Will I get symptoms myself?","card":["tay-sachs"],"hint":"tay-sachs","expect":"does not mean you have symptoms"}
+{"lang":"en","q":"How likely is it for each pregnancy?","card":["gaucher"],"hint":"gaucher","expect":"1 in 4"}
+{"lang":"en","q":"What can couples do about it?","card":["cystic-fibrosis"],"hint":"cystic-fibrosis","expect":"Options include"}
+{"lang":"en","q":"What part of the body does it affect?","card":["spinal-muscular-atrophy"],"hint":"spinal-muscular-atrophy","expect":"nerve cells"}
+{"lang":"ar","q":"ما هو التليف الكيسي؟","card":["cystic-fibrosis"],"expect":"الرئتين"}
+{"lang":"ar","q":"هل حمل جين بيلة الفينيل كيتون يعني أنني مريض؟","card":["phenylketonuria"],"expect":"لا يعني"}
+{"lang":"ar","q":"ما احتمال أن يصاب طفلنا بضمور العضلات الشوكي إذا كنا حاملين؟","card":["spinal-muscular-atrophy"],"expect":"1 من كل 4"}
+{"lang":"ar","q":"ما الحالة المتعلقة بالنحاس في الجسم؟","card":["wilson"],"expect":"النحاس"}
+{"lang":"ar","q":"هل هناك حالة تسبب حمى متكررة وألمًا؟","card":["familial-mediterranean-fever"],"expect":"الحمى"}
+{"lang":"ar","q":"أخبرني عن حالة فقدان السمع","card":["hereditary-hearing-loss","pendred"],"expect":"السمع"}
+{"lang":"ar","q":"ما علاقة سكر الجالاكتوز بنتيجتي؟","card":["galactosaemia"],"expect":"الغالاكتوز"}
+{"lang":"ar","q":"ما الخيارات المتاحة إذا كنا نحمل تغيير جين HBB؟","card":["beta-thalassaemia"],"expect":"تشمل الخيارات"}
+{"lang":"ar","q":"من يتخذ القرار؟","card":["carrier-basics"],"expect":"القرار قرارك"}
+{"lang":"ar","q":"هل أبناء عمي أكثر عرضة لحمل التغيير نفسه؟","card":["carrier-basics"],"expect":"أبناء العم"}
+{"lang":"ar","q":"إذا كان أحدنا فقط حاملاً، هل يصاب أطفالنا؟","card":["carrier-basics"],"expect":"أحد الوالدين فقط"}
+{"lang":"ar","q":"ماذا يعني أن أكون حاملاً؟","card":["carrier-basics"],"expect":"نسخة متغيّرة"}
+{"lang":"ar","q":"هل ستظهر علي أعراض؟","card":["tay-sachs"],"hint":"tay-sachs","expect":"لا يعني"}
+{"lang":"ar","q":"ما الاحتمال في كل حمل؟","card":["gaucher"],"hint":"gaucher","expect":"1 من كل 4"}
+{"lang":"ar","q":"ماذا يمكن للزوجين أن يفعلا؟","card":["cystic-fibrosis"],"hint":"cystic-fibrosis","expect":"تشمل الخيارات"}
+{"lang":"ar","q":"أي جزء من الجسم تؤثر عليه؟","card":["spinal-muscular-atrophy"],"hint":"spinal-muscular-atrophy","expect":"الخلايا العصبية"}
+{"lang":"ar","q":"ما الحالة التي تؤثر على الغدد الكظرية؟","card":["congenital-adrenal-hyperplasia"],"expect":"الكظرية"}
+{"lang":"ar","q":"نتيجتي تذكر الأمونيا، ما هذه الحالة؟","card":["citrullinemia"],"expect":"الأمونيا"}
+{"lang":"ar","q":"ما الحالة التي تتراكم فيها الدهون في الأعضاء؟","card":["gaucher"],"expect":"الدهون"}
