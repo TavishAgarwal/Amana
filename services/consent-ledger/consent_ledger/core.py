@@ -24,6 +24,7 @@ def _h(entry: dict) -> str:
 class AuditStore(Protocol):
     def append(self, entry: dict) -> None: ...
     def all(self) -> list[dict]: ...
+    def last(self) -> dict | None: ...
 
 
 class MemoryStore:
@@ -35,6 +36,9 @@ class MemoryStore:
 
     def all(self) -> list[dict]:
         return self.rows
+
+    def last(self) -> dict | None:
+        return self.rows[-1] if self.rows else None
 
 
 class PostgresStore:
@@ -62,6 +66,12 @@ class PostgresStore:
         return [dict(zip(("seq", "ts", "actor", "action", "detail", "prev", "hash"), r))
                 for r in cur.fetchall()]
 
+    def last(self) -> dict | None:
+        r = self.conn.execute(
+            "select seq,ts,actor,action,detail,prev,hash from audit order by seq desc limit 1"
+        ).fetchone()
+        return dict(zip(("seq", "ts", "actor", "action", "detail", "prev", "hash"), r)) if r else None
+
 
 @dataclass
 class Ledger:
@@ -70,11 +80,14 @@ class Ledger:
     revoked: set[str] = field(default_factory=set)
 
     def _audit(self, actor: str, action: str, detail: str, now: float) -> None:
-        rows = self.store.all()
-        entry = {"seq": len(rows), "ts": int(now), "actor": actor, "action": action,
-                 "detail": detail, "prev": rows[-1]["hash"] if rows else GENESIS}
+        # Only the last row is read, so writing stays the same speed as the log grows. Two
+        # writers racing for one seq are stopped by the primary key on seq.
+        last = self.store.last()
+        entry = {"seq": last["seq"] + 1 if last else 0, "ts": int(now), "actor": actor,
+                 "action": action, "detail": detail, "prev": last["hash"] if last else GENESIS}
         entry["hash"] = _h(entry)
         self.store.append(entry)
+
 
     def verify_chain(self) -> bool:
         prev = GENESIS
@@ -104,15 +117,21 @@ class Ledger:
         self.revoked.add(perm_id)  # effective immediately
         self._audit(holder_pk[:8], "revoke", perm_id, now)
 
-    def check(self, grantee: str, ptype: str, holder_pk: str, now: float | None = None) -> bool:
-        """Default is no access. Every attempt is audited."""
+    def allowed(self, grantee: str, ptype: str, holder_pk: str, now: float | None = None) -> bool:
+        """Is there a live permission? Not audited: use only where no personal data is returned
+        (for example, whether a case id belongs in a counsellor's queue)."""
         now = time.time() if now is None else now
-        ok = any(
+        return any(
             p.permission.grantee == grantee and p.permission.type == ptype
             and p.permission.holder_pk == holder_pk and p.permission.expires_at > now
             and pid not in self.revoked
             for pid, p in self.permissions.items()
         )
+
+    def check(self, grantee: str, ptype: str, holder_pk: str, now: float | None = None) -> bool:
+        """Default is no access. Every attempt to read shared data is audited."""
+        now = time.time() if now is None else now
+        ok = self.allowed(grantee, ptype, holder_pk, now)
         self._audit(grantee, "access_allowed" if ok else "access_denied",
                     f"{ptype}:{holder_pk[:8]}", now)
         return ok

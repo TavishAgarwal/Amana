@@ -2,10 +2,15 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from schemas.models import SignedCredential
 
-from .core import Refused, new_service
+from .core import Refused, from_env
 
-svc = new_service()
+svc = from_env()
 api = FastAPI(title="AMANA national token service")
+
+
+@api.get("/healthz")
+def healthz():
+    return {"ok": True, "labs": len(svc.labs)}
 
 
 class IssueRequest(BaseModel):

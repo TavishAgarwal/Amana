@@ -103,3 +103,21 @@ def test_postgres_store_is_append_only_and_chain_verifies():
         store.conn.execute("update audit set actor='z' where seq=%s", (n0,))
     with pytest.raises(psycopg.errors.RaiseException):
         store.conn.execute("delete from audit where seq=%s", (n0,))
+
+
+def test_audit_append_reads_only_the_last_row():
+    """Writing an audit entry must not read the whole log, or writes slow down as it grows."""
+    from consent_ledger.core import MemoryStore
+
+    class Counting(MemoryStore):
+        reads = 0
+
+        def all(self):
+            Counting.reads += 1
+            return super().all()
+
+    led = Ledger(store=Counting())
+    for i in range(500):
+        led._audit("a", "x", str(i), now=1000 + i)
+    assert Counting.reads == 0
+    assert led.verify_chain() and len(led.store.rows) == 500

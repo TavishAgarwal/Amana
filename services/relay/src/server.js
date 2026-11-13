@@ -2,19 +2,45 @@
 // Logs hold event names only; hex runs and anything token-like are scrubbed (rules.md §4).
 import { WebSocketServer } from "ws";
 import { randomBytes } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { createServer as createHttps } from "node:https";
+import { createServer as createHttp } from "node:http";
 
 export const SESSION_TTL_MS = 300_000;
 const HEX = /\b[0-9a-f]{32,}\b/gi;
 export const scrub = (s) => String(s).replace(HEX, "[token]");
 
-export function createRelay({ port = 0, ttlMs = SESSION_TTL_MS, maxPerMinute = 60, log = () => {} } = {}) {
-  const wss = new WebSocketServer({ port });
+// The address a rate limit counts. Behind a load balancer every socket comes from the proxy, so with
+// trustProxy the last X-Forwarded-For entry (the one the trusted proxy added) is used instead.
+export function clientIp(req, trustProxy = false) {
+  const fwd = trustProxy && req.headers["x-forwarded-for"];
+  if (fwd) return String(fwd).split(",").map((s) => s.trim()).filter(Boolean).at(-1) ?? "?";
+  return req.socket.remoteAddress ?? "?";
+}
+
+// tls = { cert, key } (PEM) serves wss:// so phones on a LAN can reach it from an https:// wallet.
+// GET /healthz answers 200 for container health probes; nothing else is served over plain HTTP.
+export function createRelay({ port = 0, ttlMs = SESSION_TTL_MS, maxPerMinute = 60, log = () => {}, tls = null, trustProxy = false } = {}) {
+  const onHttp = (req, res) => {
+    res.writeHead(req.url === "/healthz" ? 200 : 404, { "content-type": "text/plain" });
+    res.end(req.url === "/healthz" ? "ok" : "");
+  };
+  const server = tls ? createHttps({ cert: tls.cert, key: tls.key }, onHttp) : createHttp(onHttp);
+  const wss = new WebSocketServer({ server, maxPayload: 256 * 1024 });
+  const ready = new Promise((res) => server.listen(port, res));
   const sessions = new Map(); // id -> {created, peers:[ws], used}
   const hits = new Map();
   const emit = (m) => log(scrub(m));
+  // Forget idle rate-limit entries and abandoned sessions once a minute, so memory stays flat.
+  const sweep = setInterval(() => {
+    const now = Date.now();
+    for (const [ip, h] of hits) if (!h.some((t) => now - t < 60_000)) hits.delete(ip);
+    for (const [id, s] of sessions) if (s.peers.length < 2 && now - s.created > ttlMs) { s.peers.forEach((p) => p.close(1008, "expired")); sessions.delete(id); }
+  }, 60_000);
+  sweep.unref();
 
   wss.on("connection", (ws, req) => {
-    const ip = req.socket.remoteAddress ?? "?";
+    const ip = clientIp(req, trustProxy);
     const now = Date.now();
     const h = (hits.get(ip) ?? []).filter((t) => now - t < 60_000);
     h.push(now);
@@ -51,10 +77,17 @@ export function createRelay({ port = 0, ttlMs = SESSION_TTL_MS, maxPerMinute = 6
       if (s) { s.peers.forEach((p) => p !== ws && p.close()); sessions.delete(sid); emit("session_closed"); }
     });
   });
-  return { wss, sessions, close: () => wss.close() };
+  const address = () => server.address();
+  return { wss, sessions, ready, address, close: () => { clearInterval(sweep); wss.close(); server.close(); } };
 }
 
 if (process.argv[1] === new URL(import.meta.url).pathname) {
-  const r = createRelay({ port: Number(process.env.PORT ?? 8080), log: console.log });
-  console.log("relay listening", r.wss.address().port);
+  const { TLS_CERT, TLS_KEY, RELAY_MAX_PER_MINUTE, TRUST_PROXY, RELAY_QUIET } = process.env;
+  const tls = TLS_CERT && TLS_KEY ? { cert: readFileSync(TLS_CERT), key: readFileSync(TLS_KEY) } : null;
+  const r = createRelay({
+    port: Number(process.env.PORT ?? 8080), tls, trustProxy: TRUST_PROXY === "1",
+    maxPerMinute: Number(RELAY_MAX_PER_MINUTE ?? 60), log: RELAY_QUIET === "1" ? () => {} : console.log,
+  });
+  await r.ready;
+  console.log(`relay listening ${tls ? "wss" : "ws"}://0.0.0.0:${r.address().port}`);
 }

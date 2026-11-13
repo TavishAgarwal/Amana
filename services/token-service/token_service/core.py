@@ -1,6 +1,8 @@
 """National token service: one national key, per-period HMAC tokens, registered labs only."""
 import hashlib
 import hmac
+import json
+import os
 import time
 from dataclasses import dataclass, field
 
@@ -37,6 +39,10 @@ class TokenService:
 
     def register_lab(self, lab_id: str, lab_public_key: bytes, api_key: str) -> None:
         self.labs[lab_id] = (lab_public_key, hashlib.sha256(api_key.encode()).digest())
+
+    def register_lab_hash(self, lab_id: str, lab_public_key: bytes, api_key_sha256: bytes) -> None:
+        """Register a lab from the registry file, which holds only a hash of its API key."""
+        self.labs[lab_id] = (lab_public_key, api_key_sha256)
 
     def _period_key(self, period: int) -> bytes:
         return hmac.new(self.master_key, f"period:{period}".encode(), hashlib.sha256).digest()
@@ -96,6 +102,53 @@ class TokenService:
 
 def new_service(**kw) -> TokenService:
     sk, pk = signing.generate_keypair()
-    import os
-
     return TokenService(master_key=os.urandom(32), signing_key=sk, public_key=pk, **kw)
+
+
+def from_keys(master_hex: str, signing_hex: str, **kw) -> TokenService:
+    """Build the service from fixed keys, so every copy and every restart issues the same tokens."""
+    master, seed = bytes.fromhex(master_hex), bytes.fromhex(signing_hex)
+    if len(master) != 32 or len(seed) != 32:
+        raise ValueError("national keys must be 32 bytes each")
+    from nacl.signing import SigningKey
+
+    return TokenService(master_key=master, signing_key=seed,
+                        public_key=bytes(SigningKey(seed).verify_key), **kw)
+
+
+def from_env(env: dict[str, str] | None = None) -> TokenService:
+    """Keys from NATIONAL_MASTER_KEY + NATIONAL_SIGNING_KEY (Key Vault secrets in Azure), or from
+    NATIONAL_TOKEN_KEY_FILE for local runs (created on first use, mode 0600). Labs from
+    LAB_REGISTRY: a JSON list of {lab_id, public_key, api_key_sha256}, all hex; no API keys.
+    With no keys at all a random service is built; refused when AMANA_ENV=production."""
+    env = os.environ if env is None else env
+    kw = {"rate_per_minute": int(env.get("TOKEN_RATE_PER_MINUTE", "600"))}
+    if env.get("NATIONAL_MASTER_KEY") and env.get("NATIONAL_SIGNING_KEY"):
+        svc = from_keys(env["NATIONAL_MASTER_KEY"], env["NATIONAL_SIGNING_KEY"], **kw)
+    elif path := env.get("NATIONAL_TOKEN_KEY_FILE"):
+        if not os.path.exists(path):
+            # Write a temporary file, then link it into place: workers starting together all end
+            # up reading the one file that won, never a half-written one.
+            tmp = f"{path}.{os.getpid()}.tmp"
+            fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            with os.fdopen(fd, "w") as f:
+                json.dump({"master": os.urandom(32).hex(), "signing": os.urandom(32).hex()}, f)
+            try:
+                os.link(tmp, path)
+            except FileExistsError:
+                pass
+            finally:
+                os.unlink(tmp)
+        with open(path) as f:
+            k = json.load(f)
+        svc = from_keys(k["master"], k["signing"], **kw)
+    elif env.get("AMANA_ENV") == "production":
+        raise RuntimeError("national keys missing: set NATIONAL_MASTER_KEY and NATIONAL_SIGNING_KEY")
+    else:
+        svc = new_service(**kw)
+    if reg := env.get("LAB_REGISTRY"):
+        with open(reg) as f:
+            for lab in json.load(f):
+                svc.register_lab_hash(lab["lab_id"], bytes.fromhex(lab["public_key"]),
+                                      bytes.fromhex(lab["api_key_sha256"]))
+    return svc

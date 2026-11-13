@@ -79,3 +79,33 @@ def test_issue_1000_under_30s_and_fhir(world):
     creds = [a.issue(f"p{i}", ["HBB", "CFTR"]) for i in range(1000)]
     assert time.time() - t < 30
     assert a.fhir_bundle(creds[0])["resourceType"] == "Bundle"
+
+
+def test_copies_built_from_the_same_keys_issue_the_same_tokens(tmp_path):
+    """Several workers or replicas, and a restart, must all issue matching tokens."""
+    import hashlib
+    import json
+
+    from token_service.core import from_env
+
+    lab = LabIssuer("lab-a")
+    reg = tmp_path / "labs.json"
+    reg.write_text(json.dumps([{"lab_id": "lab-a", "public_key": lab.public_key.hex(),
+                                "api_key_sha256": hashlib.sha256(lab.api_key.encode()).hexdigest()}]))
+    env = {"NATIONAL_TOKEN_KEY_FILE": str(tmp_path / "key.json"), "LAB_REGISTRY": str(reg)}
+    one, two = from_env(env), from_env(env)  # the second reads the file the first created
+    assert (tmp_path / "key.json").stat().st_mode & 0o777 == 0o600
+    cred = lab.issue("p1", ["HBB"])
+    a = one.issue("lab-a", lab.api_key, cred, ["HBB"], "pk", now=1000)
+    b = two.issue("lab-a", lab.api_key, cred, ["HBB"], "pk", now=1000)
+    assert a.token_set.tokens == b.token_set.tokens and one.public_key == two.public_key
+    assert two.verify_token_set(a, now=1000)
+    with pytest.raises(Refused, match="bad_api_key"):
+        two.issue("lab-a", "wrong", cred, ["HBB"], "pk", now=1000)
+
+
+def test_production_refuses_to_start_without_national_keys():
+    from token_service.core import from_env
+
+    with pytest.raises(RuntimeError, match="national keys missing"):
+        from_env({"AMANA_ENV": "production"})

@@ -24,7 +24,8 @@ async function wallet(genes, { forge = false, period = PERIOD } = {}) {
 }
 
 const relay = createRelay({ maxPerMinute: 10_000 });
-const url = `ws://localhost:${relay.wss.address().port}`;
+await relay.ready;
+const url = `ws://localhost:${relay.address().port}`;
 test.after(() => relay.close());
 
 /** Connects two wallets through the relay; returns their events, everything they sent, and the peers. */
