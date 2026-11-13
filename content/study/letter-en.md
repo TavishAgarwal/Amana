@@ -1,0 +1,1 @@
+Laboratory report. Test: expanded carrier screening (premarital programme). Result: HETEROZYGOUS for a pathogenic variant in HBB, c.118C>T (p.Gln40Ter). Interpretation: carrier of autosomal recessive beta-thalassaemia. Partner testing and genetic counselling are recommended.

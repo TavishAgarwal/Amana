@@ -11,6 +11,7 @@ export type WalletPkg = {
   token_set: { token_set: { period: number; holder_pk: string; tokens: string[] }; signature: string; attestation_signature: string };
   genes: Gene[];
   last_shared?: boolean;
+  last_revealed?: { gene: string; card: string | null }[];  // only after both partners agreed
 };
 type KV = { get(k: string): Promise<unknown>; set(k: string, v: unknown): Promise<void>; clear(): Promise<void> };
 
@@ -88,6 +89,12 @@ export async function loadWallet(): Promise<WalletPkg | null> {
   } catch { return null; }
 }
 export const wipeDevice = () => store().clear();
+
+// National tokens change every period (token_service PERIOD_SECONDS, 7 days). A wallet from an
+// earlier period cannot do a check until it fetches a new token set by signing in again.
+export const PERIOD_SECONDS = 7 * 24 * 3600;
+export const currentPeriod = (nowMs = Date.now()) => Math.floor(nowMs / 1000 / PERIOD_SECONDS);
+export const tokensStale = (w: WalletPkg, nowMs = Date.now()) => w.token_set.token_set.period < currentPeriod(nowMs);
 
 /** Checks the lab's signature on the result and the national signature on the token set. */
 export async function verifyWallet(w: WalletPkg) {

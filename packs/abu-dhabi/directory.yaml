@@ -2,3 +2,7 @@
 counsellors:
   - {id: c-001, name: "Counsellor A (synthetic)", languages: [ar, en], tiers: [2, 3]}
   - {id: c-002, name: "Counsellor B (synthetic)", languages: [ar], tiers: [3]}
+slots:
+  days_ahead: 3
+  hours: [10, 13, 16]   # local time, Gulf Standard Time (UTC+4)
+  utc_offset_hours: 4

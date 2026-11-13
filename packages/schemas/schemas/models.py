@@ -64,4 +64,13 @@ class Case(BaseModel):
     due_at: int | None = None
     summary: str = ""
     label: Literal["information", "clinical_advice"] = "information"
+    condition_code: str | None = None  # only when the person chose to share the condition name
+    result: str | None = None
+    question: str | None = None  # Tier 2: the person's question, if they asked one
     signed_off_by: str | None = None
+    counsellor: str = ""
+    source: Literal["programme", "private_check", "self"] = "self"
+    language: str = "ar"
+    slot_at: int | None = None  # one-to-one appointment the person booked
+    scope: list[str] = Field(default_factory=list)  # what the person chose to share
+    note: str = ""  # counsellor's final note; shown to the person only after sign-off

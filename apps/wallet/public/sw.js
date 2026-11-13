@@ -1,9 +1,10 @@
 // AMANA service worker: caches the app shell only. /api responses (health data) are never cached.
+// The on-device question model has its own cache ("amana-ask", lib/ask/load.ts); it is kept here.
 const CACHE = "amana-shell-v1";
 const SHELL = ["/offline.html", "/icon-192.png", "/manifest.webmanifest"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => {
-  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE && k !== "amana-ask").map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 self.addEventListener("fetch", (e) => {
   const u = new URL(e.request.url);

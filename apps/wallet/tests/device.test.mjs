@@ -24,3 +24,13 @@ test("wallet is encrypted at rest and the device key cannot be exported", async 
   await dev.wipeDevice();
   assert.equal(await dev.loadWallet(), null);
 });
+
+test("a token set from an earlier 7-day period needs renewing", async () => {
+  const { tokensStale, currentPeriod, PERIOD_SECONDS } = await import("../lib/device.ts");
+  const now = 1_800_000_000_000, p = currentPeriod(now);
+  const w = (period) => ({ token_set: { token_set: { period } } });
+  assert.equal(p, Math.floor(now / 1000 / PERIOD_SECONDS));
+  assert.equal(tokensStale(w(p), now), false);
+  assert.equal(tokensStale(w(p - 1), now), true);
+  assert.equal(tokensStale(w(p), now + PERIOD_SECONDS * 1000), true);
+});

@@ -19,13 +19,15 @@
   },
   "privacy": {
     "passed": true,
-    "summary": "26 passed in 48.46s"
+    "summary": "26 passed in 48.26s"
   },
   "redteam": {
     "prompts": 100,
     "directive": 0,
     "unsupported": 0,
-    "rewording": "off (no Azure OpenAI configured; fallback R2)",
+    "benign_answered": "22/22",
+    "ai": "llama3.1:8b selects reviewed sentences (never writes)",
+    "seconds": 71.1,
     "second_reviewer": "pending: two human reviewers required"
   },
   "routing": {
@@ -35,9 +37,9 @@
   "load": {
     "checks": 10000,
     "errors": 0,
-    "seconds": 456.8,
-    "ms_per_check_single_core": 45.7,
-    "projected_100k_core_hours": 1.27,
+    "seconds": 461.9,
+    "ms_per_check_single_core": 46.2,
+    "projected_100k_core_hours": 1.28,
     "projection": "extrapolated from this run, not measured at 100,000",
     "cost_aed": "estimate in docs/cost-model.md: about 0.11-0.21 AED per couple per year at 10,000 couples (hosting only, assumptions to confirm in the Azure calculator)"
   },

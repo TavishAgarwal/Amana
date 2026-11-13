@@ -1,0 +1,9 @@
+condition: carrier-basics
+gene: null
+sources:
+- GeneReviews
+- MedlinePlus
+reviewer: null
+review_status: pending clinical review
+arabic_review: pending native-speaker review
+version: 1
