@@ -75,3 +75,13 @@ All rows tagged [idea]. Tier/opened status per note file. Never cited without be
 | 69 | https://www.ncbi.nlm.nih.gov/home/about/policies/ | [idea] | idea/notes/research_track_fertility.md |
 | 70 | https://github.com/microsoft/APSI | [idea] | idea/notes/research_track_fertility.md |
 | 71 | https://github.com/google/private-join-and-compute | [idea] | idea/notes/research_track_fertility.md |
+| 72 | https://www.ehs.gov.ae/app_content/legislations/php-law-en-77/files/basic-html/page7.html | [project] | docs/compliance.md (Law 2/2019 text) |
+| 73 | https://tamimi.com/law-update-articles/the-federal-law-regulating-the-use-of-information-and-communication-technology-in-the-uae-healthcare-sector | [project] | docs/compliance.md (summary) |
+| 74 | https://uaelegislation.gov.ae/en/legislations/1972/download | [project] | docs/compliance.md (PDPL text, not opened in full) |
+| 75 | https://www.herbertsmithfreehills.com/latest-thinking/new-data-protection-law-introduced-in-the-uae-%E2%80%93-10-key-takeaways | [project] | docs/compliance.md (summary) |
+| 76 | https://dha.gov.ae/uploads/062024/Federal%20Law_49_2023_Regulating%20the%20Use%20of%20the%20Human%20Genome202466484.pdf | [project] | docs/compliance.md (genome law text, not opened in full) |
+| 77 | https://turtl.tamimi.com/story/law-update-issue-373-healthcare-and-life-sciences-focus/page/8 | [project] | docs/compliance.md (summary) |
+| 78 | https://www.doh.gov.ae/-/media/032019_ADHICS.ashx | [project] | docs/compliance.md (ADHICS 2019) |
+| 79 | https://www.doh.gov.ae/-/media/Feature/Aamen/ADHICS-FAQ.ashx | [project] | docs/compliance.md |
+| 80 | https://www.tamimi.com/news/abu-dhabi-uae-issues-standard-on-healthcare-data-privacy | [project] | docs/compliance.md (summary) |
+| 81 | https://www.doh.gov.ae/-/media/B84FF5DD027846699C51F36C439A580F.ashx | [project] | docs/compliance.md (DoH Responsible AI Standard) |

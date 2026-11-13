@@ -185,7 +185,7 @@ sequenceDiagram
 ### 2.5 Family invites (stretch, I-F9)
 1. The carrier chooses relatives' contact method outside the app (they send the link themselves).
 2. The wallet creates an invite link with a random ID and a "family invite" permission.
-3. The invite page says only: a relative carries a genetic change; testing is available; how to book.
+3. The invite page says only that someone in the family thinks they may want to learn about carrier screening, that carriers are usually healthy, and links to general information. It does not even say that the sender is a carrier.
 4. The page **never** shows the sender or the gene. Acceptance is counted in aggregate only.
 
 ### 2.6 Revoking and deleting
@@ -243,6 +243,38 @@ sequenceDiagram
 | Console | `GET /dashboard` | Programme metrics (aggregated) | Programme manager |
 | Invites (stretch) | `POST /invite` · `GET /i/:id` | Create / view anonymous invite | Wallet / anyone with link |
 | Packs | `GET /packs/:country` | Country pack | All services |
+
+### 4.1 What the prototype serves (`services/demo-api`)
+One FastAPI app plays the labs, token service, ledger, explainer and console for the demo. It never holds
+wallets and has no endpoint that returns anyone's genes after delivery; the check itself runs on the
+phones over `services/relay`.
+
+| Path | Purpose | Proof the caller is allowed |
+|---|---|---|
+| `POST /api/signin`, `POST /api/enroll` | Mock national-ID sign-in; deliver the lab-signed result + national tokens once, bound to the device key | Signed ID token |
+| `GET /api/pack`, `GET /api/directory` | Panel size; counsellors and free slots from the country pack | Public |
+| `GET /api/card/{code}` | Card in sections | Public (no personal data) |
+| `GET /api/card/{code}/key`, `POST /api/ask` | Server copy of "simpler words" and question answering (console, evaluation). The wallet does not call them: see 4.2 | Public |
+| `POST /api/teachback`, `GET /api/study` | Anonymous quiz answers; study material | Public, no identity stored |
+| `POST /api/consent` | Signed permission: check, reveal, share with a counsellor (opens a case: scope, question, slot), family invite | Device-key signature |
+| `POST /api/revoke`, `POST /api/withdraw` | Revoke one / everything | Device-key signature |
+| `POST /api/sharing`, `POST /api/my-cases` | My permissions and audit log; my cases and signed-off notes | Device-key signature, fresh within 2 min |
+| `GET /api/invite/{id}`, `POST /api/invite/{id}/accept` | Anonymous invite page; count acceptance | Anyone with the link |
+| `GET /api/cases`, `GET /api/case/{id}`, `GET /api/case/{id}/status`, `POST /api/case/{id}/signoff`, `POST /api/case/{id}/label` | Queue (no personal data, not logged); case (consent-checked, logged); draft ready?; sign-off; label | Mock counsellor sign-in + live permission |
+| `GET /api/dashboard`, `GET /api/attack`, `GET /api/ai` | Metrics; attack demo; whether the AI is on | Public (aggregates only) |
+
+### 4.2 Questions answered on the phone (`apps/wallet/lib/ask`)
+Questions are personal, so the wallet answers them itself and sends nothing.
+
+| File (wallet) | What it does |
+|---|---|
+| `public/ask/index.json` (~40 KB) | Reviewed sentences of every card in both languages, card names, section of each sentence, and the safety rules, exported from `services/explainer` by `scripts/build_ask_index.py` |
+| `public/ask/static-64/` (4.9 MB, optional) | Static multilingual embedding model (token vectors, int8, 64 dims), with SHA-256 sums and tuned weights in `model.json` |
+| `lib/ask/engine.ts` | Same rules as the server: decision questions get the fixed reply; answers are whole reviewed sentences; with the model, sentences are picked by meaning |
+| `lib/ask/wordpiece.ts`, `static-embed.ts` | Tokenizer (matches the official one) and mean-of-token-vectors embedding |
+| `lib/ask/load.ts` | Chooses the level per phone (rules on phones under 1 GB or without storage), asks before downloading (says when on mobile data), checks sums, caches in the Cache API, removes on request |
+
+Levels and results: `docs/model-card.md` §1.
 
 ---
 
@@ -428,6 +460,6 @@ Exact versions are pinned in lockfiles at project start. Only versions checked d
 | AI | Azure OpenAI (GPT-4o-class), rewording only | Microsoft co-runs the challenge; UAE region | BiMediX2 rejected: non-commercial licence |
 | Public data | ClinVar (NCBI), gnomAD v4 (Middle Eastern group), CTGA | Realistic carriers and conditions | Cite CTGA, don't redistribute |
 | Testing | Vitest, Playwright (JS); pytest (Python) | Standard | End-to-end on the demo script |
-| Load test | k6 | Scriptable, handles WebSocket | 10,000 and 100,000 couples |
+| Load test | Node scripts (`loadtest/relay-load.mjs`, `token-load.mjs`) | No extra install; real message sizes | Measured 10 Nov 2026: ~3,000 token sets/s per worker, ~3,000 couples/s per relay core |
 | Lint / format | ESLint + Prettier; Ruff | Standard | Enforced in CI |
 | CI / hosting | GitHub Actions; Azure Container Apps; Azure Key Vault | Simple, credits available | UAE North |

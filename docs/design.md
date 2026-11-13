@@ -316,7 +316,9 @@ Used for Gate 2 and the final video. Two phones (Mariam, Khalid) + a laptop (con
 
 ## 10. Accessibility
 
-- **Standard:** WCAG 2.2 AA on all core screens.
+- **Standard:** WCAG 2.2 AA on all core screens. Checked automatically with `pnpm a11y`
+  (`scripts/a11y.mjs`): 0 axe-core violations on 58 screens on 10 Nov 2026. The screen-reader line
+  below is the target; it has not been tested by hand yet (`docs/limitations.md`).
 - **Screen readers:** tested with VoiceOver (iOS) and TalkBack (Android) in Arabic and English. Every icon button has a label; QR has a text alternative (manual code).
 - **Text size:** layouts hold at 200% text size with no cut-off text.
 - **Focus:** visible focus ring on every interactive element in the console.

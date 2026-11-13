@@ -23,3 +23,13 @@ No real person's data, names, Emirates ID numbers or phone numbers appear anywhe
 **Designed (target architecture):** genes reach only the lab and the national token service at issue time. The phone holds the credential and tokens. The relay sees only scrambled private-check messages. Servers hold permissions and audit entries.
 
 **Current demo (since 9 Nov, matches the design):** the demo API plays the labs and the national token service. After mock sign-in it sends each person's result and tokens **once**, bound to that device's key; the phone keeps them encrypted. The API keeps no wallets and has no endpoint that returns anyone's genes. The private check runs between the phones over the relay, which forwards scrambled messages only. The synthetic "lab database" (`LAB_RECORDS` in `services/demo-api`) stays on the server, as a real lab's records would.
+
+## What the server stores, and who can see it (demo API, in memory)
+| Data | Holds | Never holds | Who can read it |
+|---|---|---|---|
+| Permissions + audit log | Holder's device public key, type, grantee, expiry, signature; hash-chained log | Genes | The holder (signed request); counsellors only through a live permission |
+| Counsellor case | Tier, timing, language, source (programme / private check / self), the scope the person ticked: result type, condition card (only if ticked), question text, slot; counsellor's note | Name, other genes, the partner's result | The named counsellor while the permission is live (each read logged); the person sees the note after sign-off |
+| Study answers | Card, question, correct or not, language, reading comfort, stage, random quiz id, source (live / synthetic) | Name, device id, IP | Dashboard aggregates only; groups under 5 hidden |
+| Family invites | Random id, accepted yes/no | Sender's name, gene, condition (the sender's key sits on the ledger permission so they can revoke it) | Totals on the dashboard |
+| AI calls | Card text and case tier/result/card for counsellor drafts; the question only on the server copy of the question path (`/api/ask`), which the wallet does not call | Names, ids, keys, tokens | Runs on the same machine (Ollama); in production inside the programme's Azure tenant |
+| Questions typed in the wallet's Ask box | Nothing: they are answered on the phone from the card index and are never sent | Everything | No one but the person. The phone downloads only the card index and, if the person agrees, the 4.9 MB model; neither request carries the question |
