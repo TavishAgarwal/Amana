@@ -44,7 +44,7 @@ Full design: [`docs/architecture.md`](docs/architecture.md). Threats and answers
 
 ## Requirements
 
-Node 20+, pnpm 9, [uv](https://docs.astral.sh/uv/) (Python 3.12+), and Docker for Postgres and the container stack. `pnpm e2e` and `pnpm a11y` drive an installed Google Chrome.
+Node 22+, pnpm 9, [uv](https://docs.astral.sh/uv/) (Python 3.12 or 3.13), and Docker for Postgres and the container stack. `pnpm e2e` and `pnpm a11y` drive an installed Google Chrome.
 
 ## Set up and test
 

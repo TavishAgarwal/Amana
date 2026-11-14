@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+        with: { python-version: "3.12" }  # openmined-psi ships wheels for 3.12 and 3.13 only
       - run: uv sync --group dev
       - run: uv run ruff check .
       - run: uv run pytest -q
@@ -24,7 +25,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with: { node-version: 22 }  # the wallet tests load TypeScript with --experimental-strip-types
+      # The wallet tests check the phone code against the Python services, so they need the Python side too.
+      - uses: astral-sh/setup-uv@v5
+        with: { python-version: "3.12" }
+      - run: uv sync --group dev
       - run: pnpm install
       - run: pnpm lint
       - run: pnpm test
