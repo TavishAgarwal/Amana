@@ -32,44 +32,41 @@
 
 ### 3.1 Colour (light mode)
 
+The look is warm paper and ink: off-white backgrounds, brown-black text, one muted brown for actions, and soft tints for cards. No bright colours. The source of truth is `packages/ui/tokens.css`.
+
 | Token | Hex | Use |
 |---|---|---|
-| `color.bg` | `#FAF8F4` | App background (warm off-white) |
-| `color.surface` | `#FFFFFF` | Cards, sheets |
-| `color.surface.muted` | `#F1EDE6` | Secondary panels, input backgrounds |
-| `color.border` | `#DAD4CA` | Decorative dividers and card borders only |
-| `color.border.strong` | `#7A8481` | Input outlines, checkboxes, toggles (needs 3:1) |
-| `color.text` | `#1C2321` | Main text |
-| `color.text.muted` | `#4F5B58` | Secondary text |
-| `color.primary` | `#0F5E63` | Primary buttons, links, result panels (deep teal) |
-| `color.primary.hover` | `#0B4A4E` | Hover / pressed |
-| `color.primary.soft` | `#E3EFEE` | Selected states, privacy notes |
-| `color.accent` | `#C8A96A` | Decorative only (illustration, logo detail). **Never for text** |
-| `color.info` | `#3A4A8C` | Counsellor and help elements (indigo) |
-| `color.error` | `#A12C2C` | **Form and system errors only. Never for genetic results** |
-| `color.warning` | `#8A5A00` | System warnings (offline, expiring session) |
-| `color.focus` | `#1F7AE0` | Keyboard focus ring (2 px + 2 px offset) |
+| `--bg` | `#F6F1E9` | App background (paper), with a faint warm glow at the top (`--bg-glow` `#F1E2D6`) |
+| `--surface` | `#FFFCF7` | Cards, sheets |
+| `--muted` | `#EFE8DD` | Secondary panels, badges |
+| `--border` | `#E4DBCD` | Decorative dividers and card borders only |
+| `--border-strong` | `#8A7E71` | Input outlines, checkboxes, outline buttons (needs 3:1) |
+| `--text` | `#2A2420` | Main text |
+| `--text-muted` | `#6A5F55` | Secondary text, small-caps labels |
+| `--primary` | `#6B4430` | Primary buttons and links (deep brown) |
+| `--primary-hover` | `#55341F` | Hover / pressed |
+| `--primary-soft` | `#F0E5D9` | Selected states, "reviewed" badge |
+| `--ink` / `--on-ink` | `#2A2420` / `#FFF7EC` | The floating tab bar, result panels and the "Ask" pill |
+| `--dot-0` … `--dot-4` | `#E9E1D5` → `#6E3B22` | The gene dot matrix and the inheritance diagram, light to dark |
+| `--tint-sand` / `-sage` / `-blue` / `-rose` | `#EFE3CF` / `#DFE4D5` / `#DCE2E7` / `#EEDDD6` | Card tints in the swipe rows, in that order |
+| `--info` | `#3F5A78` | Counsellor and help elements |
+| `--error` | `#9E3B2F` | **Form and system errors only. Never for genetic results** |
+| `--warning` | `#8A5A00` | System warnings and "pending review" |
+| `--focus` | `#2F6FB3` | Keyboard focus ring (2 px + 2 px offset) |
 
 ### 3.2 Colour (dark mode)
 
 | Token | Hex |
 |---|---|
-| `color.bg` | `#121615` |
-| `color.surface` | `#1A201F` |
-| `color.surface.muted` | `#232A29` |
-| `color.border` | `#33403E` |
-| `color.border.strong` | `#6E7C79` |
-| `color.text` | `#EDEBE6` |
-| `color.text.muted` | `#B4BDBA` |
-| `color.primary` | `#5FC4C0` |
-| `color.primary.hover` | `#7FD3CF` |
-| `color.primary.soft` | `#1E3A39` |
-| `color.info` | `#9FB0F0` |
-| `color.error` | `#F08A8A` |
-| `color.warning` | `#E8B65C` |
-| `color.focus` | `#6AAEFF` |
+| `--bg` | `#191613` |
+| `--surface` | `#221F1B` |
+| `--text` | `#EFE8DE` |
+| `--text-muted` | `#B8AD9F` |
+| `--primary` | `#E3B98F` (text on it: `#191613`) |
+| `--ink` | `#0E0C0A` |
+| `--dot-0` … `--dot-4` | `#35302A` → `#F0C9A0` |
 
-**Contrast:** every text/background pair must reach WCAG AA (4.5:1 body, 3:1 large text and UI parts). Checked on 8 Nov 2026: light mode, text pairs range from 5.6:1 (warning) to 15.1:1; white on primary is 7.5:1; the focus ring is 4.0:1. Dark mode text pairs range from 5.9:1 to 15.3:1. `color.border` (1.4:1) is decorative only. Use `color.border.strong` (light 3.6:1, dark 3.8:1 or higher) wherever a border is the only way to see a control. Re-check any new pair before Gate 2.
+**Contrast:** every text/background pair reaches WCAG AA (4.5:1 body, 3:1 large text and UI parts). Checked on 14 Nov 2026. Light mode: text on background 13.6:1, muted text 5.5:1, white on primary 8.4:1, tab bar text on ink 8.7:1, `--border-strong` on surface 3.9:1. Dark mode: every pair 4.4:1 or higher. `--border` is decorative only. `scripts/a11y.mjs` checks 58 screens in both modes with axe-core: 0 violations.
 
 ### 3.3 Chart colours (dashboard)
 Colour-blind-safe set, used in this order: `#0072B2` · `#E69F00` · `#009E73` · `#CC79A7` · `#56B4E9`. Always add labels or patterns, so colour is never the only signal.
@@ -78,8 +75,11 @@ Colour-blind-safe set, used in this order: `#0072B2` · `#E69F00` · `#009E73` �
 
 | Role | Arabic | English |
 |---|---|---|
-| Typeface | IBM Plex Sans Arabic | IBM Plex Sans |
-| Licence / source | SIL Open Font Licence, Google Fonts | SIL Open Font Licence, Google Fonts |
+| Titles, the big result number, card titles | Noto Naskh Arabic, Al Nile or Geeza Pro (serif) | Iowan Old Style, Palatino or Georgia (serif) |
+| Body, buttons, labels | The system sans-serif face | The system sans-serif face |
+| Source | Fonts already on the phone. Nothing is downloaded, so text shows offline and no font request leaves the device | |
+
+Section labels are small capitals with wide letter spacing ("ABOUT", "YOUR CARDS"); in Arabic they use the normal face with no spacing.
 
 | Style | Size (Arabic / English) | Weight | Line height (Arabic / English) |
 |---|---|---|---|
@@ -132,11 +132,11 @@ Colour-blind-safe set, used in this order: `#0072B2` · `#E69F00` · `#009E73` �
 
 | Component | Purpose | Key details |
 |---|---|---|
-| **Button** | Actions | Primary (filled teal, pill) · Secondary (outline) · Tertiary (text) · Destructive (outline, error colour; used only for delete/revoke). One primary button per screen |
+| **Button** | Actions | Primary (filled brown) · Ink (dark pill, for the one main action on a screen) · Secondary (outline) · Tertiary (text) · Destructive (outline, error colour; used only for delete/revoke). One primary button per screen |
 | **PrivacyNote** | Says who can see this screen's data | Small bar with lock icon in `primary.soft`: "Only you can see this." Appears on every screen with personal data |
-| **ResultPanel** | Shows a check or programme result | Same size, colour (`primary`) and layout for every outcome. Contains: plain-language result, what it means (one line), next step button |
+| **ResultPanel** | Shows a check or programme result | Same size, colour (`ink`) and layout for every outcome. Contains: plain-language result, what it means (one line), next step button |
 | **ConditionCard** | Explains one condition | Title, "What it is", "Being a carrier", "If both partners carry it", "Your options", sources, ReviewStatusBadge. Expandable sections |
-| **ReviewStatusBadge** | Content trust | "Reviewed by a clinician" (teal) or "Pending clinical review" (warning colour, with explanation) |
+| **ReviewStatusBadge** | Content trust | "Reviewed by a clinician" (soft brown) or "Pending clinical review" (warning colour, with explanation) |
 | **TeachBackQuestion** | Understanding check | One question per screen, 3 large answer options, gentle feedback that explains the right answer. No scores shown as grades |
 | **InheritanceDiagram** | Shows the 25% idea | Four-child grid: 1 not a carrier, 2 carriers, 1 affected. Illustrated people, not pedigree symbols. Caption: "This is the chance for **each** pregnancy" |
 | **ConsentSheet** | Asks for a permission | Bottom sheet: what will be shared, with whom, for how long, how to undo it. Two buttons: "Agree" (primary) and "Not now" (secondary, equal size) |
@@ -345,6 +345,9 @@ Used for Gate 2 and the final video. Two phones (Mariam, Khalid) + a laptop (con
 - Easing: standard ease-out.
 - The check progress uses a calm, looping animation (no spinner flashing), max 3 s before showing the result.
 - No confetti, shakes or pulses on results.
+- Pages fade up in a short stagger as they open. The gene dots fill in from left to right once, then stay still.
+- Card rows scroll sideways and snap one card at a time, with small page dots underneath. The header gains a thin line and a blur once the page scrolls.
+- Every animation is turned off when the phone asks for reduced motion.
 
 ---
 

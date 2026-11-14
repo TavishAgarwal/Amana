@@ -36,6 +36,8 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
   const phaseRef = useRef<Phase>("start");
   const go = (p: Phase) => { phaseRef.current = p; setPhase(p); };
   const fail = (reason: string) => { setErr(reason); go("error"); conn.current?.close(); };
+  // Leave the session and go back to the first step. The partner's phone is told the session closed.
+  const restart = () => { phaseRef.current = "start"; conn.current?.close(); location.reload(); };
   useEffect(() => () => conn.current?.close(), []);
   useEffect(() => {
     if (phase !== "showing" || !qr) return;
@@ -91,7 +93,7 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
       created: async (sid) => { setup(sid); setQr({ sid, img: await QRCode.toDataURL(PAIR_PREFIX + sid, { margin: 1, width: 440 }), at: Date.now() }); go("showing"); },
       joined: () => { if (mode === "join") setup(joinSid); go("checking"); void peer.current?.start(); },
       message: (m) => { void peer.current?.receive(m as { t: string }); },
-      closed: () => { if (["showing", "checking", "joining"].includes(phaseRef.current)) fail("session_closed"); },
+      closed: (reason) => { if (["showing", "checking", "joining"].includes(phaseRef.current)) fail(reason === "session_invalid_or_expired" ? "code_unknown" : "session_closed"); },
     });
     conn.current = c;
     try { await c.ready; } catch { return fail("relay_unreachable"); }
@@ -131,8 +133,10 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
       <img src={qr.img} alt={t(locale, "qr_alt")} width={240} height={240} style={{ maxInlineSize: "100%", blockSize: "auto" }} />
       <p className="small muted">{t(locale, "qr_left")} <strong className="ltr">{mm}</strong> · {t(locale, "qr_why")}</p>
       <details><summary className="small">{t(locale, "manual_code")}</summary><p className="ltr small" style={{ overflowWrap: "anywhere" }}>{qr.sid}</p></details>
-      <p role="status" className="soft">{t(locale, "waiting_partner")}</p></div>)}
-    {(phase === "joining" || phase === "checking") && <div className="card" role="status"><p><strong>{t(locale, "checking")}</strong></p><p className="muted">{t(locale, "checking_line")}</p></div>}
+      <p role="status" className="soft">{t(locale, "waiting_partner")}</p>
+      <button className="tertiary" onClick={restart}>{t(locale, "cancel")}</button></div>)}
+    {(phase === "joining" || phase === "checking") && <div className="card" role="status"><p><strong>{t(locale, "checking")}</strong></p><p className="muted">{t(locale, "checking_line")}</p>
+      <button className="tertiary" onClick={restart}>{t(locale, "cancel")}</button></div>}
     {phase === "result" && shared !== null && !genes && (shared
       ? <ResultPanel title={t(locale, "shared_yes")} line={t(locale, iAgreed ? (theyAgreed ? "checking" : "waiting") : "shared_yes_line")}>
           {!iAgreed && <button onClick={() => setRevealAsk(true)}>{t(locale, "show_cond")}</button>}
@@ -150,12 +154,13 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
         <Link className="btn" href={`/${locale}/help?book=1&from=private_check`}>{t(locale, "book")}</Link></ResultPanel>
       {genes.map((g) => <CardPreview key={g} locale={locale} code={cards[g] ?? null} gene={g} />)}
       <p className="soft">{t(locale, "options")}</p></>)}
+    {phase === "result" && <p><button className="tertiary" onClick={restart}>{t(locale, "again")}</button></p>}
     {phase === "error" && (err === "codes_old" || err === "renew_failed") && (<div className="card" role="alert">
       <p>{t(locale, err === "codes_old" ? "codes_old" : "renew_failed")}</p>
       <button className="block" onClick={() => void renew()} disabled={renewing}>{t(locale, renewing ? "enrolling" : "renew_codes")}</button></div>)}
     {phase === "error" && err !== "codes_old" && err !== "renew_failed" && (<div className="card" role="alert">
-      <p>{t(locale, err === "no_wallet" ? "no_wallet" : err === "relay_unreachable" ? "relay_down" : err === "code_expired" ? "code_expired" : err === "expired_token_set" ? "partner_codes_old" : "check_failed")}</p>
-      {!["no_wallet", "relay_unreachable", "code_expired", "expired_token_set"].includes(err) && <p className="muted small ltr">{err}</p>}
+      <p>{t(locale, err === "no_wallet" ? "no_wallet" : err === "relay_unreachable" ? "relay_down" : err === "code_expired" ? "code_expired" : err === "code_unknown" ? "code_unknown" : err === "expired_token_set" ? "partner_codes_old" : "check_failed")}</p>
+      {!["no_wallet", "relay_unreachable", "code_expired", "code_unknown", "expired_token_set"].includes(err) && <p className="muted small ltr">{err}</p>}
       <Link className="btn" href={`/${locale}/${err === "no_wallet" ? "welcome" : "pair"}`} onClick={() => { if (err !== "no_wallet") location.reload(); }}>{t(locale, err === "no_wallet" ? "signin" : "again")}</Link></div>)}
   </div>);
 }

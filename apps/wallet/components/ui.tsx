@@ -1,7 +1,7 @@
 "use client";
 // Wallet components from docs/design.md §5. Text comes from messages/*.json via t().
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState as useStateSafe, type ReactNode } from "react";
 import { t } from "@/lib/i18n";
 
@@ -12,13 +12,40 @@ const P: Record<string, string> = {
   shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4",
   help: "M4 5h16v11H9l-5 4zM9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4M12 14.5v.01",
   gear: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.4-3a7.4 7.4 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14.5 3h-5l-.4 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2l.4 2.6h5l.4-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z",
+  back: "M15 5l-7 7 7 7",
+  arrow: "M5 12h14M13 6l6 6-6 6",
+  lines: "M4 6h16M4 10h16M4 14h10M4 18h7",
+  cards: "M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 9h6M9 13h6",
+  ask: "M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z",
 };
 export function Icon({ name }: { name: keyof typeof P | string }) {
   return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={P[name]} /></svg>);
 }
 
-export function PrivacyNote({ locale, k = "only_you" }: { locale: string; k?: string }) {
-  return <p className="privacy"><Icon name="lock" /><span>{t(locale, k)}</span></p>;
+export function PrivacyNote({ locale, k = "only_you", center }: { locale: string; k?: string; center?: boolean }) {
+  return <p className={`privacy${center ? " center" : ""}`}><Icon name="lock" /><span>{t(locale, k)}</span></p>;
+}
+
+/** Small-caps label at the top of a card: "ABOUT", "YOUR CARDS". */
+/** Small-caps section label. Pass as="h2" when cards with their own headings follow it. */
+export function Label({ icon, children, as: Tag = "p" }: { icon: string; children: ReactNode; as?: "p" | "h2" }) {
+  return <Tag className="label"><Icon name={icon} />{children}</Tag>;
+}
+
+/** A row of cards you swipe through. It snaps to each card; the dots under it show where you are. */
+export function Rail({ label, children }: { label: string; children: ReactNode[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [at, setAt] = useStateSafe(0);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const f = () => { const first = el.firstElementChild as HTMLElement | null; if (!first) return;
+      setAt(Math.round(Math.abs(el.scrollLeft) / (first.offsetWidth + 12))); };
+    el.addEventListener("scroll", f, { passive: true }); return () => el.removeEventListener("scroll", f);
+  }, []);
+  return (<>
+    <div className="rail" ref={ref} role="list" aria-label={label}>{children.map((c, i) => <div role="listitem" key={i} style={{ display: "grid" }}>{c}</div>)}</div>
+    {children.length > 1 && <div className="rail-dots" aria-hidden="true">{children.map((_, i) => <i key={i} className={i === Math.min(at, children.length - 1) ? "on" : ""} />)}</div>}
+  </>);
 }
 
 /** Same size, colour and layout whatever the outcome, so a glance at the screen tells nobody anything. */
@@ -33,11 +60,11 @@ export function ReviewBadge({ locale, status }: { locale: string; status: string
 }
 
 function Person({ kind }: { kind: "clear" | "carrier" | "affected" }) {
-  const fill = kind === "affected" ? "var(--info)" : kind === "carrier" ? "var(--primary)" : "var(--surface)";
+  const fill = kind === "affected" ? "var(--dot-4)" : kind === "carrier" ? "var(--dot-2)" : "var(--surface)";
   return (<svg viewBox="0 0 40 56" aria-hidden="true">
     <circle cx="20" cy="12" r="9" fill={fill} stroke="var(--border-strong)" strokeWidth="2" />
     <path d="M5 54c0-12 6-22 15-22s15 10 15 22z" fill={kind === "carrier" ? "url(#half)" : fill} stroke="var(--border-strong)" strokeWidth="2" />
-    <defs><linearGradient id="half" x1="0" x2="1"><stop offset=".5" stopColor="var(--primary)" /><stop offset=".5" stopColor="var(--surface)" /></linearGradient></defs>
+    <defs><linearGradient id="half" x1="0" x2="1"><stop offset=".5" stopColor="var(--dot-2)" /><stop offset=".5" stopColor="var(--surface)" /></linearGradient></defs>
   </svg>);
 }
 /** The 1-in-4 idea as four children: 1 not a carrier, 2 carriers, 1 with the condition. */
@@ -81,27 +108,40 @@ export function Steps({ locale, n, of }: { locale: string; n: number; of: number
     <span>{t(locale, "step_of").replace("{n}", String(n)).replace("{of}", String(of))}</span></p>);
 }
 
-const TABS: [string, string, string][] = [["result", "nav_result", "home"], ["pair", "nav_pair", "pair"], ["sharing", "nav_sharing", "shield"], ["help", "nav_help", "help"]];
+// Five tabs; "Check together" sits in the middle as a raised round button.
+const TABS: [string, string, string][] = [["result", "nav_result", "home"], ["sharing", "nav_sharing", "shield"], ["pair", "nav_pair", "pair"],
+  ["help", "nav_help", "help"], ["settings", "nav_settings", "gear"]];
 export function TabBar({ locale }: { locale: string }) {
   const path = usePathname() ?? "";
   if (/\/(welcome|invite\/)/.test(path)) return null;
   return (<nav className="tabbar" aria-label={t(locale, "nav_main")}>
     {TABS.map(([seg, k, ic]) => {
       const on = path.startsWith(`/${locale}/${seg}`) || (seg === "result" && path.startsWith(`/${locale}/card`));
-      return <Link key={seg} href={`/${locale}/${seg}`} aria-current={on ? "page" : undefined}><Icon name={ic} />{t(locale, k)}</Link>;
+      return seg === "pair"
+        ? <Link key={seg} className="centre" href={`/${locale}/${seg}`} aria-current={on ? "page" : undefined}><span className="disc"><Icon name={ic} /></span>{t(locale, k)}</Link>
+        : <Link key={seg} href={`/${locale}/${seg}`} aria-current={on ? "page" : undefined}><Icon name={ic} />{t(locale, k)}</Link>;
     })}
   </nav>);
 }
 
+/** Brand on the main screens, a round back button on inner ones. A hairline appears once you scroll. */
 export function TopBar({ locale }: { locale: string }) {
   const path = usePathname() ?? `/${locale}/welcome`;
+  const router = useRouter();
   const other = locale === "ar" ? "en" : "ar";
   const onboarding = /\/(welcome|invite\/|study)/.test(path);
-  return (<header className="topbar">
-    <Link className="brand" href={`/${locale}/result`}>AMANA</Link>
+  const inner = /\/(card\/|help\/invite)/.test(path);
+  const [scrolled, setScrolled] = useStateSafe(false);
+  useEffect(() => {
+    const f = () => setScrolled(scrollY > 8); f();
+    addEventListener("scroll", f, { passive: true }); return () => removeEventListener("scroll", f);
+  }, [setScrolled]);
+  return (<header className="topbar" data-scrolled={scrolled}>
+    {inner
+      ? <button className="round" onClick={() => (history.length > 1 ? router.back() : router.push(`/${locale}/result`))} aria-label={t(locale, "back")}><span className="flip"><Icon name="back" /></span></button>
+      : <Link className="brand" href={`/${locale}/result`}>Amana</Link>}
     <div className="row">
-      {onboarding && <Link href={path.replace(`/${locale}`, `/${other}`)} lang={other} hrefLang={other}>{other === "ar" ? "العربية" : "English"}</Link>}
-      {!onboarding && <Link href={`/${locale}/settings`} aria-label={t(locale, "settings")}><Icon name="gear" /></Link>}
+      {onboarding && <Link className="lang" href={path.replace(`/${locale}`, `/${other}`)} lang={other} hrefLang={other}>{other === "ar" ? "العربية" : "English"}</Link>}
     </div>
   </header>);
 }

@@ -8,10 +8,10 @@ import LockGate from "./lock-gate";
 export const metadata = {
   title: "AMANA",
   manifest: "/manifest.webmanifest",
-  icons: { apple: "/apple-touch-icon.png" },
+  icons: { icon: "/icon-192.png", apple: "/apple-touch-icon.png" },
   appleWebApp: { capable: true, title: "AMANA", statusBarStyle: "default" as const },
 };
-export const viewport = { viewportFit: "cover" as const, themeColor: "#0F5E63" };
+export const viewport = { viewportFit: "cover" as const, themeColor: "#F6F1E9" };
 
 export default async function L({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;

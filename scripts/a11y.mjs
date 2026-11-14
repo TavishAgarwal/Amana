@@ -48,7 +48,7 @@ async function textZoom(page, path) {
 }
 
 // Wallet, phone size.
-const phone = await browser.newContext({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2 });
+const phone = await browser.newContext({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2, reducedMotion: "reduce" });
 const w = await phone.newPage();
 for (const loc of ["en", "ar"]) {
   await w.goto(`${WALLET}/${loc}/welcome`);
@@ -56,6 +56,7 @@ for (const loc of ["en", "ar"]) {
   for (const s of ["light", "dark"]) await scan(w, "wallet", `/${loc}/welcome (step 1)`, s);
 }
 await w.goto(`${WALLET}/en/welcome`);
+await w.waitForLoadState("networkidle"); // a click before the page is interactive does nothing
 await w.getByRole("button", { name: en.continue }).click();
 for (const s of ["light", "dark"]) await scan(w, "wallet", "/en/welcome (sign in)", s);
 await w.getByRole("button", { name: en.signin }).click();
@@ -78,7 +79,7 @@ for (const loc of ["en", "ar"]) {
 }
 
 // Console, desktop size.
-const desk = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const desk = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
 const c = await desk.newPage();
 await c.goto(`${CONSOLE}/en/queue`);
 await c.waitForLoadState("networkidle");

@@ -16,7 +16,10 @@ export default function Sharing({ params }: { params: Promise<{ locale: string }
   const [w, setW] = useState<WalletPkg | null | undefined>(undefined);
   const [s, setS] = useState<S | null>(null);
   const [pk8, setPk8] = useState("");
-  const load = useCallback(async () => { const r = await post("/api/sharing", await signedRequest("list")); if (r.ok) setS(r.data); }, []);
+  const [down, setDown] = useState(false);
+  const load = useCallback(async () => {
+    try { const r = await post("/api/sharing", await signedRequest("list")); if (r.ok) { setS(r.data); setDown(false); } else setDown(true); } catch { setDown(true); }
+  }, []);
   useEffect(() => { loadWallet().then(async (x) => { setW(x); if (x) { setPk8((await deviceKeys()).pk.slice(0, 8)); void load(); } }); }, [load]);
   if (w === undefined) return null;
   if (!w) return <NoWallet locale={locale} />;
@@ -24,7 +27,8 @@ export default function Sharing({ params }: { params: Promise<{ locale: string }
     await post("/api/revoke", { holder_pk: (await deviceKeys()).pk, permission: id, sig: await sign({ revoke: id }) });
     await load();
   };
-  if (!s) return null;
+  if (!s) return down ? (<div><h1>{t(locale, "sharing")}</h1><p className="banner-warn" role="alert">{t(locale, "api_down")}</p>
+    <button className="secondary" onClick={() => void load()}>{t(locale, "try_again")}</button></div>) : null;
   const active = s.permissions.filter((p) => !p.revoked && p.type !== "check_only" && p.type !== "reveal_condition");
   const past = s.permissions.filter((p) => p.revoked || p.type === "check_only" || p.type === "reveal_condition");
   return (<div>

@@ -20,6 +20,8 @@ dev = ["ruff", "pytest", "mypy"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Pitch-video tooling (Blender and audio scripts) is not part of the product.
+extend-exclude = ["pitch/video"]
 
 [tool.pytest.ini_options]
 pythonpath = [

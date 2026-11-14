@@ -5,15 +5,23 @@ import { get } from "@/lib/api";
 import { declineModel, downloadModel, useAsk } from "@/lib/ask/load";
 import type { Answer } from "@/lib/ask/engine";
 import { t } from "@/lib/i18n";
-import { InheritanceDiagram, ReviewBadge } from "./ui";
+import { Icon, InheritanceDiagram, ReviewBadge } from "./ui";
 
 export type CardData = { card: string; gene: string; title: string; text: string; review_status: string; sources: string[];
   sections: { key: string; sentences: string[] }[]; teachback?: { q: string; options: string[]; answer: number }[] };
 
-export const useCard = (code: string | null, locale: string) => {
-  const [c, setC] = useState<CardData | null>(null);
-  useEffect(() => { if (code) get(`/api/card/${code}?lang=${locale}`).then(setC); }, [code, locale]);
+/** null while loading, "missing" when there is no such card or the service cannot be reached. */
+export const useCardOr = (code: string | null, locale: string) => {
+  const [c, setC] = useState<CardData | null | "missing">(null);
+  useEffect(() => {
+    if (!code) return;
+    get(`/api/card/${encodeURIComponent(code)}?lang=${locale}`).then((x) => setC(Array.isArray(x?.sections) ? x : "missing")).catch(() => setC("missing"));
+  }, [code, locale]);
   return c;
+};
+export const useCard = (code: string | null, locale: string) => {
+  const c = useCardOr(code, locale);
+  return c === "missing" ? null : c;
 };
 
 /** Short preview on the home screen: title, first line, "Learn more". */
@@ -27,6 +35,18 @@ export function CardPreview({ locale, code, gene }: { locale: string; code: stri
   </div>);
 }
 
+/** A tinted card in the swipe row on My result: gene, condition, first line, round arrow. */
+export function TileCard({ locale, code, gene, title }: { locale: string; code: string; gene?: string; title?: string }) {
+  const c = useCard(code, locale);
+  const line = c?.sections.find((s) => s.key === "carrier")?.sentences[0] ?? c?.sections[0]?.sentences[0] ?? c?.text;
+  return (<Link className="tile-card" href={`/${locale}/card/${code}`}>
+    {gene && <span className="badge ltr">{gene}</span>}
+    <h3>{title ?? c?.title ?? gene}</h3>
+    {line && <p>{line}</p>}
+    <span className="go" aria-hidden="true"><span className="flip"><Icon name="arrow" /></span></span>
+  </Link>);
+}
+
 /** The reviewed card in the design's sections. Every sentence is shown word for word. */
 export function ConditionCard({ locale, c }: { locale: string; c: CardData }) {
   const [simple, setSimple] = useState(false);
@@ -35,7 +55,8 @@ export function ConditionCard({ locale, c }: { locale: string; c: CardData }) {
   const kp = simple && engine ? engine.keyPoints(c.card, locale === "ar" ? "ar" : "en") : null;
   const toggle = () => setSimple((s) => !s);
   return (<article className="card">
-    <div className="spread"><h1 style={{ margin: 0 }}>{c.title}</h1><ReviewBadge locale={locale} status={c.review_status} /></div>
+    <ReviewBadge locale={locale} status={c.review_status} />
+    <h1 style={{ marginBlock: "8px 4px" }}>{c.title}</h1>
     {c.review_status !== "reviewed" && <p className="small muted">{t(locale, "pending_review_why")}</p>}
     <p><button className="secondary" aria-pressed={simple} onClick={toggle} disabled={!engine}>{t(locale, simple ? "full_card" : "simpler")}</button></p>
     {simple && kp ? (<div className="soft">

@@ -3,6 +3,8 @@ const standalone = process.env.AMANA_STANDALONE
   ? { output: "standalone", outputFileTracingRoot: new URL("../..", import.meta.url).pathname } : {};
 export default {
   ...standalone,
-  async redirects() { return [{ source: "/", destination: "/en/queue", permanent: false }]; },
+  devIndicators: false,
+  async redirects() { return [{ source: "/", destination: "/en/queue", permanent: false },
+    { source: "/:locale(ar|en)", destination: "/:locale/queue", permanent: false }]; },
   async rewrites() { return [{ source: "/api/:path*", destination: `${process.env.AMANA_API ?? "http://localhost:8000"}/api/:path*` }]; },
 };

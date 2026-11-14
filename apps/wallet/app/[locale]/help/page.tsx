@@ -5,8 +5,8 @@ import { get, post } from "@/lib/api";
 import { loadWallet, signedPermission, signedRequest, type WalletPkg } from "@/lib/device";
 import { t } from "@/lib/i18n";
 import NoWallet from "@/components/no-wallet";
-import { AskBox } from "@/components/card";
-import { ConsentSheet, fmtTime, PrivacyNote } from "@/components/ui";
+import { AskBox, TileCard } from "@/components/card";
+import { ConsentSheet, fmtTime, Label, PrivacyNote, Rail } from "@/components/ui";
 
 type Counsellor = { id: string; name: string; languages: string[]; tiers: number[]; slots: number[] };
 type MyCase = { id: string; tier: number; slot_at: number | null; counsellor: string; signed_off: boolean; label: string; note: string | null };
@@ -24,13 +24,20 @@ export default function Help({ params }: { params: Promise<{ locale: string }> }
   const [withCondition, setWithCondition] = useState(false);
   const [busy, setBusy] = useState(false), [done, setDone] = useState(""), [err, setErr] = useState("");
   const [from, setFrom] = useState("");
-  const loadMine = useCallback(async () => { const r = await post("/api/my-cases", await signedRequest("my_cases")); if (r.ok) setMine(r.data); }, []);
+  const loadMine = useCallback(async () => {
+    try { const r = await post("/api/my-cases", await signedRequest("my_cases")); if (r.ok) setMine(r.data); } catch { /* offline: the cards and questions below still work */ }
+  }, []);
   useEffect(() => {
     setFrom(new URLSearchParams(location.search).get("from") ?? "");
     loadWallet().then((x) => { setW(x); if (x) void loadMine(); });
-    get(`/api/directory?lang=${locale}`).then((d) => setDir(d.counsellors));
+    get(`/api/directory?lang=${locale}`).then((d) => setDir(d.counsellors ?? [])).catch(() => setErr("api_down"));
   }, [locale, loadMine]);
-  useEffect(() => { if (from && w) document.getElementById("book")?.scrollIntoView(); }, [from, w]);
+  useEffect(() => {
+    if (!w) return;
+    // The page draws after the wallet opens, so the browser's own jump to #ask or #book comes too early.
+    const id = from ? "book" : location.hash.slice(1);
+    if (id) document.getElementById(id)?.scrollIntoView({ block: "center" });
+  }, [from, w]);
   if (w === undefined) return null;
   if (!w) return <NoWallet locale={locale} />;
 
@@ -79,9 +86,10 @@ export default function Help({ params }: { params: Promise<{ locale: string }> }
         {c.note && (<div className="soft"><p className="small muted" style={{ marginBlockStart: 0 }}>{t(locale, c.label === "clinical_advice" ? "label_advice" : "label_signed")}</p><p style={{ marginBlockEnd: 0, whiteSpace: "pre-wrap" }}>{c.note}</p></div>)}
       </div>))}</section>)}
 
-    <section className="card"><h2>{t(locale, "tier1_title")}</h2><p>{t(locale, "tier1_line")}</p>
-      <div className="row">{w.genes.filter((g) => g.card).map((g) => <Link key={g.gene} className="btn secondary" href={`/${locale}/card/${g.card}`}><span className="ltr">{g.gene}</span></Link>)}
-        <Link className="btn secondary" href={`/${locale}/card/carrier-basics`}>{t(locale, "basics")}</Link></div></section>
+    <section><Label icon="cards" as="h2">{t(locale, "tier1_title")}</Label><p className="muted" style={{ marginBlockStart: 0 }}>{t(locale, "tier1_line")}</p>
+      <Rail label={t(locale, "tier1_title")}>{[
+        ...w.genes.filter((g) => g.card).map((g) => <TileCard key={g.gene} locale={locale} code={g.card!} gene={g.gene} />),
+        <TileCard key="basics" locale={locale} code="carrier-basics" title={t(locale, "basics")} />]}</Rail></section>
     <AskBox locale={locale} />
 
     <section className="card"><h2>{t(locale, "tier2_title")}</h2><p>{t(locale, "tier2_line")}</p>
@@ -92,6 +100,7 @@ export default function Help({ params }: { params: Promise<{ locale: string }> }
     <section className="card" id="book"><h2>{t(locale, "tier3_title")}</h2>
       <p>{t(locale, coupleResult === "incompatible" ? "tier3_line_priority" : "tier3_line")}</p>
       {dir.map((c) => (<div key={c.id}><p><strong>{c.name}</strong> <span className="small muted">{c.languages.map((l) => (l === "ar" ? "العربية" : "English")).join(" · ")}</span></p>
+        {c.slots.length === 0 && <p className="soft">{t(locale, "no_slots")}</p>}
         <div className="slots">{c.slots.map((s) => (<button key={s} className="secondary" aria-pressed={slot?.at === s && slot.c.id === c.id}
           onClick={() => setSlot({ c, at: s })}>{fmtTime(locale, s)}</button>))}</div></div>))}
       <p><button disabled={!slot} onClick={() => setSheet("book")}>{t(locale, "book")}</button></p></section>

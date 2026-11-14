@@ -16,7 +16,10 @@ export default function StudyPage({ params }: { params: Promise<{ locale: string
   const [step, setStep] = useState(1);
   const [lit, setLit] = useState("mid");
   const [agree, setAgree] = useState(false);
-  useEffect(() => { get(`/api/study?lang=${locale}`).then(setS); }, [locale]);
+  const [down, setDown] = useState(false);
+  useEffect(() => { get(`/api/study?lang=${locale}`).then((x) => (x?.questions ? setS(x) : setDown(true))).catch(() => setDown(true)); }, [locale]);
+  if (down) return (<div className="stack"><p className="banner-warn" role="alert">{t(locale, "api_down")}</p>
+    <Link className="btn secondary block" href={`/${locale}/welcome`}>{t(locale, "back")}</Link></div>);
   if (!s) return null;
   return (<div>
     <Steps locale={locale} n={step} of={4} />

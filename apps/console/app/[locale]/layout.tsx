@@ -4,7 +4,8 @@ import type { ReactNode } from "react";
 import { dir, t } from "@/lib/i18n";
 import Who from "@/components/who";
 
-export const metadata = { title: "AMANA console" };
+const ICON = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1F4E46"/><text x="16" y="23" font-family="Georgia,serif" font-size="20" text-anchor="middle" fill="#F6F1E9">A</text></svg>');
+export const metadata = { title: "AMANA console", icons: { icon: ICON } };
 // Side navigation on the start side (right in Arabic, left in English), design §4.2.
 export default async function L({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;

@@ -2,15 +2,18 @@
 import Link from "next/link";
 import { use, useState } from "react";
 import { t } from "@/lib/i18n";
-import { AskBox, ConditionCard, useCard } from "@/components/card";
+import { AskBox, ConditionCard, useCardOr } from "@/components/card";
 import { LiteracyPick, TeachBack } from "@/components/teachback";
 
 // W4 condition card + teach-back + questions answered from reviewed cards only.
 export default function CardPage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { locale, code } = use(params);
-  const c = useCard(code, locale);
+  const c = useCardOr(code, locale);
   const [lit, setLit] = useState("mid");
   if (!c) return null;
+  if (c === "missing") return (<div className="card"><h1>{t(locale, "nf_title")}</h1><p>{t(locale, "card_missing")}</p>
+    <div className="row"><Link className="btn" href={`/${locale}/card/carrier-basics`}>{t(locale, "basics")}</Link>
+      <Link className="btn secondary" href={`/${locale}/result`}>{t(locale, "nf_home")}</Link></div></div>);
   return (<div>
     <ConditionCard locale={locale} c={c} />
     <p className="soft">{t(locale, "options")}</p>

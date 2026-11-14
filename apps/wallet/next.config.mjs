@@ -8,6 +8,9 @@ export default {
   // scripts/two-phones.sh sets its own build folder so it can run beside the normal dev server.
   ...(process.env.AMANA_DIST_DIR ? { distDir: process.env.AMANA_DIST_DIR } : {}),
   allowedDevOrigins: devOrigins,
-  async redirects() { return [{ source: "/", destination: "/ar/welcome", permanent: false }]; },
+  // The dev badge sits on top of the first tab on a phone-sized screen.
+  devIndicators: false,
+  async redirects() { return [{ source: "/", destination: "/ar/welcome", permanent: false },
+    { source: "/:locale(ar|en)", destination: "/:locale/welcome", permanent: false }]; },
   async rewrites() { return [{ source: "/api/:path*", destination: `${process.env.AMANA_API ?? "http://localhost:8000"}/api/:path*` }]; },
 };

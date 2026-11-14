@@ -223,8 +223,8 @@ def _slots(cid: str, now: float) -> list[int]:
 @api.get("/api/directory")
 def directory(lang: str = "ar"):
     now = time.time()
-    return {"counsellors": [{**c, "slots": _slots(c["id"], now)[:6]} for c in D.counsellors.values()
-                            if lang in c["languages"]] or list(D.counsellors.values())}
+    rows = [c for c in D.counsellors.values() if lang in c["languages"]] or list(D.counsellors.values())
+    return {"counsellors": [{**c, "slots": _slots(c["id"], now)[:6]} for c in rows]}
 
 
 class Ask(BaseModel):

@@ -126,5 +126,8 @@
  "invites": "Family invites opened / sent",
  "invites_note": "Totals only. No sender, no gene.",
  "demo_banner": "DEMONSTRATION. Not the real app.",
- "attack_line": "An attacker claims every gene on the panel. Plain hash matching reveals the partner's genes; AMANA rejects the claim."
+ "attack_line": "An attacker claims every gene on the panel. Plain hash matching reveals the partner's genes; AMANA rejects the claim.",
+ "nf_title": "This page does not exist",
+ "nf_line": "The link may be old or mistyped.",
+ "nf_home": "Go to the queue"
 }
