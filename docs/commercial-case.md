@@ -16,7 +16,7 @@ The person never pays. The product is licensed to the programme.
 | Market | Figure | Source |
 |---|---|---|
 | Abu Dhabi premarital genetic test | 11,748 couples tested 2022–Jul 2026; 565 (≈5%) incompatible | Gulf News, 3 Oct 2026 ([link](https://gulfnews.com/uae/health/abu-dhabi-genetic-screening-flags-565-incompatible-cases-among-couples-1.500697261)) |
-| Abu Dhabi panel | 570 genes, 840+ conditions; mandatory for Emirati couples | Abu Dhabi Media Office ([link](https://www.mediaoffice.abudhabi/en/health/doh-to-expand-pre-marital-screening-for-570-genetic-medical-conditions/)) |
+| Abu Dhabi panel | 570 genes, 840+ conditions; mandatory for Emirati couples | Gulf News, 3 Oct 2026 ([link](https://gulfnews.com/uae/health/abu-dhabi-genetic-screening-flags-565-incompatible-cases-among-couples-1.500697261)). The 2022 Abu Dhabi Media Office announcement ([link](https://www.mediaoffice.abudhabi/en/health/doh-to-expand-pre-marital-screening-for-570-genetic-medical-conditions/)) words it as "570 medical conditions" |
 | UAE-wide | Genetic testing mandatory in premarital screening for Emiratis from January 2025 | MOHAP ([link](https://mohap.gov.ae/en/w/mohap-announces-mandatory-genetic-testing-as-part-of-premarital-screening-for-emiratis-starting-early-january-2025)). Yearly volume **not published**; to request from MOHAP |
 | Saudi Arabia | Mandatory premarital screening since 2004; about 150,000 marriages a year (secondary figure) | PMC7898212 ([link](https://pmc.ncbi.nlm.nih.gov/articles/PMC7898212)) |
 | Consanguinity (why this matters here) | 50.5% of UAE marriages consanguineous, 26.2% first cousin (1994–95; no recent national figure) | UAEU ([link](https://research.uaeu.ac.ae/en/publications/consanguineous-marriages-in-the-united-arab-emirates/)) |
