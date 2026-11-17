@@ -11,6 +11,7 @@
     "db:up": "docker compose up -d postgres",
     "a11y": "node scripts/a11y.mjs",
     "e2e": "node scripts/e2e.mjs",
+    "walkthrough": "node scripts/walkthrough.mjs",
     "stack": "docker compose -f docker-compose.stack.yml up --build",
     "load": "loadtest/run.sh",
     "two-phones": "scripts/two-phones.sh"

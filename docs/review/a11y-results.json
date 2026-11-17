@@ -1,8 +1,8 @@
 {
  "summary": {
-  "date": "2026-11-14",
+  "date": "2026-11-17",
   "axe": "4.14.0",
-  "screens_scanned": 58,
+  "screens_scanned": 66,
   "wcag_violations": 0,
   "best_practice_issues": 0,
   "text_200_sideways_scroll": [],
@@ -235,6 +235,26 @@
   },
   {
    "app": "wallet",
+   "path": "/en/walkthrough",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/walkthrough",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/walkthrough",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
    "path": "/ar/result",
    "scheme": "light",
    "violations": [],
@@ -410,6 +430,66 @@
   {
    "app": "wallet",
    "path": "/ar/study",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/walkthrough",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/walkthrough",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/walkthrough",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result (at-risk couple)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result (at-risk couple)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/en/result (at-risk couple)",
+   "check": "text_200",
+   "sideways_scroll": false
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result (at-risk couple)",
+   "scheme": "light",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result (at-risk couple)",
+   "scheme": "dark",
+   "violations": [],
+   "small_targets": []
+  },
+  {
+   "app": "wallet",
+   "path": "/ar/result (at-risk couple)",
    "check": "text_200",
    "sideways_scroll": false
   },

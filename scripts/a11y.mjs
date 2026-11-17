@@ -68,7 +68,7 @@ await w.getByRole("button", { name: en.send_question }).click();
 await w.getByRole("button", { name: en.agree, exact: true }).click();
 await w.waitForTimeout(500);
 
-const walletPages = ["result", "card/beta-thalassaemia", "card/carrier-basics", "help", "help/invite", "pair", "settings", "sharing", "study"];
+const walletPages = ["result", "card/beta-thalassaemia", "card/carrier-basics", "help", "help/invite", "pair", "settings", "sharing", "study", "walkthrough"];
 for (const loc of ["en", "ar"]) {
   for (const p of walletPages) {
     await w.goto(`${WALLET}/${loc}/${p}`);
@@ -76,6 +76,20 @@ for (const loc of ["en", "ar"]) {
     for (const s of ["light", "dark"]) await scan(w, "wallet", `/${loc}/${p}`, s);
     await textZoom(w, `/${loc}/${p}`);
   }
+}
+
+// An at-risk couple (Layla: the programme found a shared gene): "What this means", the options and the next steps.
+const risk = await (await browser.newContext({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2, reducedMotion: "reduce" })).newPage();
+await risk.goto(`${WALLET}/en/welcome?as=layla`);
+await risk.waitForLoadState("networkidle");
+await risk.getByRole("button", { name: en.signin }).click();
+await risk.waitForURL(/\/result/);
+for (const loc of ["en", "ar"]) {
+  await risk.goto(`${WALLET}/${loc}/result`);
+  await risk.waitForLoadState("networkidle");
+  await risk.getByText(en.wm_check).or(risk.locator("#options")).first().waitFor();
+  for (const s of ["light", "dark"]) await scan(risk, "wallet", `/${loc}/result (at-risk couple)`, s);
+  await textZoom(risk, `/${loc}/result (at-risk couple)`);
 }
 
 // Console, desktop size.
