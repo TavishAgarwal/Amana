@@ -16,7 +16,11 @@ export default function Welcome({ params }: { params: Promise<{ locale: string }
   const [w, setW] = useState<WalletPkg | null | undefined>(undefined);
   const [step, setStep] = useState(1);
   const [busy, setBusy] = useState(false), [err, setErr] = useState("");
-  useEffect(() => { get("/api/personas").then(setList).catch(() => setErr("api_down")); loadWallet().then(setW); }, []);
+  useEffect(() => {
+    get("/api/personas").then(setList).catch(() => setErr("api_down")); loadWallet().then(setW);
+    const as = new URLSearchParams(location.search).get("as");  // the reviewer walkthrough links here with ?as=layla
+    if (as && /^[a-z]{2,20}$/.test(as)) { setP(as); setStep(2); }
+  }, []);
   const signIn = async () => {
     setBusy(true); setErr("");
     try {
@@ -34,6 +38,7 @@ export default function Welcome({ params }: { params: Promise<{ locale: string }
     <div className="card"><p>{t(locale, "signed_in_as")} <strong>{w.name}</strong></p>
       <Link className="btn block" href={`/${locale}/result`}>{t(locale, "continue")}</Link>
       <button className="tertiary" onClick={async () => { await wipeDevice(); setW(null); }}>{t(locale, "switch")}</button></div>
+    <p className="small"><Link href={`/${locale}/walkthrough`}>{t(locale, "walk_link")}</Link></p>
   </div>);
   return (<div className="stack">
     <Steps locale={locale} n={step} of={2} />
@@ -47,7 +52,8 @@ export default function Welcome({ params }: { params: Promise<{ locale: string }
       <details className="card"><summary><strong>{t(locale, "how_protect")}</strong></summary>
         <ul>{["protect_1", "protect_2", "protect_3", "protect_4"].map((k) => <li key={k}>{t(locale, k)}</li>)}</ul></details>
       <button className="block" onClick={() => setStep(2)}>{t(locale, "continue")}</button>
-      <p className="small"><Link href={`/${locale}/study`}>{t(locale, "study_link")}</Link></p>
+      <p className="small"><Link href={`/${locale}/study`}>{t(locale, "study_link")}</Link>
+        {" · "}<Link href={`/${locale}/walkthrough`}>{t(locale, "walk_link")}</Link></p>
     </>) : (<>
       <h1>{t(locale, "signin_title")}</h1>
       <p>{t(locale, "signin_receives")}</p>

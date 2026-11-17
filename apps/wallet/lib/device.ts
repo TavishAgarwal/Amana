@@ -12,6 +12,7 @@ export type WalletPkg = {
   genes: Gene[];
   last_shared?: boolean;
   last_revealed?: { gene: string; card: string | null }[];  // only after both partners agreed
+  understood?: boolean;  // a teach-back was finished on this phone; kept here only, never sent
 };
 type KV = { get(k: string): Promise<unknown>; set(k: string, v: unknown): Promise<void>; clear(): Promise<void> };
 

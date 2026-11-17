@@ -6,6 +6,7 @@ import { loadWallet, signedPermission, signedRequest, type WalletPkg } from "@/l
 import { t } from "@/lib/i18n";
 import NoWallet from "@/components/no-wallet";
 import { AskBox, TileCard } from "@/components/card";
+import { NextSteps } from "@/components/meaning";
 import { ConsentSheet, fmtTime, Label, PrivacyNote, Rail } from "@/components/ui";
 
 type Counsellor = { id: string; name: string; languages: string[]; tiers: number[]; slots: number[] };
@@ -77,8 +78,9 @@ export default function Help({ params }: { params: Promise<{ locale: string }> }
     <PrivacyNote locale={locale} k="help_privacy" />
     {done && <p className="soft" role="status">{t(locale, done === "book" ? "booked" : "question_sent")}</p>}
     {err && <p className="banner-warn" role="alert">{t(locale, err)}</p>}
+    <NextSteps locale={locale} atRisk={coupleResult === "incompatible"} cases={mine} understood={!!w.understood} meaningHref={`/${locale}/result#meaning`} />
 
-    {mine.length > 0 && (<section><h2>{t(locale, "my_cases")}</h2>
+    {mine.length > 0 && (<section id="cases"><h2>{t(locale, "my_cases")}</h2>
       {mine.map((c) => (<div className="card" key={c.id}>
         <div className="spread"><strong>{c.counsellor}</strong>
           <span className={`badge ${c.signed_off ? "ok" : "info"}`}>{t(locale, c.signed_off ? "case_answered" : "case_waiting")}</span></div>

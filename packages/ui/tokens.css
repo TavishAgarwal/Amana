@@ -262,3 +262,26 @@ details.section p { margin-block:0 10px; }
 .queue-row[aria-current="true"] { outline:2px solid var(--primary); }
 body.blurred main { filter: blur(14px); }
 a { color: var(--primary); } a:hover { color: var(--primary-hover); }
+
+/* What a result means, the options, and the next steps (wallet/components/meaning.tsx) */
+.lead { font-size:1.15rem; line-height:1.45; margin-block:4px 10px; }
+.chances { list-style:none; padding:0; margin:12px 0; display:grid; gap:10px; }
+.chances li { display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; }
+.odds { display:grid; grid-template-columns:repeat(4, 12px); gap:4px; direction:ltr; }
+.odds i { inline-size:12px; block-size:12px; border-radius:99px; background:var(--dot-0); border:1px solid var(--border); }
+.odds i.on { background:var(--dot-4); border-color:var(--dot-4); }
+.options { list-style:none; padding:0; margin:12px 0; display:grid; gap:10px; }
+.options li { border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:var(--bg); }
+.options h3 { margin:0 0 4px; font-size:1.1rem; }
+.options p { margin:0; color:var(--text-muted); }
+.journey { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:0; }
+.journey li { display:grid; grid-template-columns:32px 1fr; gap:12px; padding-block:8px; position:relative; }
+.journey li:not(:last-child)::after { content:""; position:absolute; inset-inline-start:15px; inset-block:40px -4px; border-inline-start:2px dotted var(--border-strong); }
+.journey .mark { inline-size:32px; block-size:32px; border-radius:99px; display:grid; place-items:center; font-size:.9rem;
+  border:1.5px solid var(--border-strong); color:var(--text-muted); background:var(--surface); }
+.journey li.done .mark { background:var(--dot-1); border-color:var(--dot-1); color:var(--ink); }
+.journey li.now .mark { background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
+.journey li > span:last-child { padding-block-start:4px; }
+.journey a { font-weight:600; }
+.block-line { display:block; margin-block-start:2px; }
+@media (prefers-color-scheme: dark) { .options li { background:var(--muted); } }

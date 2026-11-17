@@ -6,6 +6,7 @@ import { loadWallet, verifyWallet, type WalletPkg } from "@/lib/device";
 import { t } from "@/lib/i18n";
 import NoWallet from "@/components/no-wallet";
 import { TileCard } from "@/components/card";
+import { NextSteps, useMyCases, WhatItMeans, YourOptions, type Outcome } from "@/components/meaning";
 import { Icon, Label, PrivacyNote, Rail, ResultPanel } from "@/components/ui";
 
 // Where a gene sits in the dot matrix. Only a picture: the same gene always lands on the same dot.
@@ -33,15 +34,23 @@ export default function Result({ params }: { params: Promise<{ locale: string }>
   const [w, setW] = useState<WalletPkg | null | undefined>(undefined);
   const [ok, setOk] = useState<boolean | null>(null);
   const [n, setN] = useState(111);
+  const { cases } = useMyCases();
+  const [understood, setUnderstood] = useState(false);
   useEffect(() => {
-    loadWallet().then(async (x) => { setW(x); if (x) setOk(await verifyWallet(x)); });
+    loadWallet().then(async (x) => { setW(x); if (x) { setUnderstood(!!x.understood); setOk(await verifyWallet(x)); } });
     get("/api/pack").then((p) => setN(p.panel_size)).catch(() => {});
   }, []);
+  // The page draws after the wallet opens, so the browser's own jump to #meaning comes too early.
+  useEffect(() => { if (w && location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView(); }, [w]);
   if (w === undefined) return null;
   if (!w) return <NoWallet locale={locale} />;
   const cred = w.credential.credential as typeof w.credential.credential & { issued_at?: number };
   const cr = cred.couple_result;
   const k = w.genes.length;
+  // The couple answer, from the programme or from a private check on this phone.
+  const shared = cr ? cr === "incompatible" : w.last_shared;
+  const outcome: Outcome | null = shared ? "both" : shared === false ? (k ? "partner_clear" : "clear") : k ? "self" : null;
+  const sharedCard = w.last_revealed?.[0];
   const date = cred.issued_at ? new Date(cred.issued_at * 1000).toLocaleDateString(locale === "ar" ? "ar-AE" : "en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
   const tiles = [
     ...w.genes.filter((g) => g.card).map((g) => <TileCard key={g.gene} locale={locale} code={g.card!} gene={g.gene} />),
@@ -61,9 +70,13 @@ export default function Result({ params }: { params: Promise<{ locale: string }>
     {ok === false && <p className="banner-warn" role="alert">{t(locale, "not_verified")}</p>}
     {cr && (cr === "incompatible"
       ? <ResultPanel title={t(locale, "prog_incompatible")} line={t(locale, "prog_incompatible_line")}>
+          <Link className="btn" href="#meaning">{t(locale, "what_it_means")}</Link>
           <Link className="btn" href={`/${locale}/help?book=1&from=programme`}>{t(locale, "share_counsellor")}</Link></ResultPanel>
       : <ResultPanel title={t(locale, "prog_compatible")} line={t(locale, k ? "prog_compatible_carrier" : "prog_compatible_none")}>
-          <Link className="btn" href={k ? `#cards` : `/${locale}/card/carrier-basics`}>{t(locale, k ? "what_it_means" : "learn_more")}</Link></ResultPanel>)}
+          <Link className="btn" href="#meaning">{t(locale, "what_it_means")}</Link></ResultPanel>)}
+    {outcome && <NextSteps locale={locale} atRisk={outcome === "both"} cases={cases} understood={understood} />}
+    {outcome && <WhatItMeans locale={locale} outcome={outcome} n={n} condition={sharedCard?.gene} onUnderstood={() => setUnderstood(true)} />}
+    {outcome === "both" && <YourOptions locale={locale} />}
     <section className="card">
       <Label icon="lines">{t(locale, "res_about")}</Label>
       <p className="serif" style={{ fontSize: "1.15rem", lineHeight: 1.45, marginBlock: "4px 8px" }}>{t(locale, k > 0 ? "carriers_healthy" : "none_line")}</p>

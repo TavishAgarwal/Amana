@@ -129,7 +129,7 @@ export function TopBar({ locale }: { locale: string }) {
   const path = usePathname() ?? `/${locale}/welcome`;
   const router = useRouter();
   const other = locale === "ar" ? "en" : "ar";
-  const onboarding = /\/(welcome|invite\/|study)/.test(path);
+  const onboarding = /\/(welcome|invite\/|study|walkthrough)/.test(path);
   const inner = /\/(card\/|help\/invite)/.test(path);
   const [scrolled, setScrolled] = useStateSafe(false);
   useEffect(() => {

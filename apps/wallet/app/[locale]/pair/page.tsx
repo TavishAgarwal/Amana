@@ -2,13 +2,14 @@
 import QRCode from "qrcode";
 import Link from "next/link";
 import { use, useEffect, useRef, useState } from "react";
-import { post } from "@/lib/api";
+import { get, post } from "@/lib/api";
 import { createPeer, type PeerEvent } from "@/lib/check";
 import { deviceKeys, loadWallet, saveWallet, sign, signedPermission, tokensStale, verifyWith } from "@/lib/device";
 import { t } from "@/lib/i18n";
 import { clientStart, serverRespond } from "@/lib/psi";
 import { connect, PAIR_PREFIX, relayUrl } from "@/lib/relay";
 import { CardPreview } from "@/components/card";
+import { WhatItMeans, YourOptions } from "@/components/meaning";
 import { ConsentSheet, PrivacyNote, ResultPanel } from "@/components/ui";
 import Scanner from "./scanner";
 
@@ -31,6 +32,11 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
   const [cards, setCards] = useState<Record<string, string | null>>({});
   const [iAgreed, setIAgreed] = useState(false), [theyAgreed, setTheyAgreed] = useState(false);
   const [err, setErr] = useState("");
+  const [mine, setMine] = useState({ k: 0, n: 111 });  // my own gene count and the panel size, for "what this means"
+  useEffect(() => {
+    loadWallet().then((w) => w && setMine((m) => ({ ...m, k: w.genes.length })));
+    get("/api/pack").then((p) => setMine((m) => ({ ...m, n: p.panel_size }))).catch(() => {});
+  }, []);
   const conn = useRef<ReturnType<typeof connect> | null>(null);
   const peer = useRef<ReturnType<typeof createPeer> | null>(null);
   const phaseRef = useRef<Phase>("start");
@@ -145,6 +151,9 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
           <Link className="btn" href={`/${locale}/result`}>{t(locale, "learn_own")}</Link>
           <Link className="btn secondary" href={`/${locale}/help`}>{t(locale, "talk")}</Link></ResultPanel>)}
     {phase === "result" && shared && !iAgreed && theyAgreed && <p className="soft">{t(locale, "partner_agreed")}</p>}
+    {phase === "result" && shared !== null && !genes && (<>
+      <WhatItMeans locale={locale} outcome={shared ? "both" : mine.k ? "partner_clear" : "clear"} n={mine.n} />
+      {shared && <YourOptions locale={locale} />}</>)}
     <ConsentSheet locale={locale} open={revealAsk} title={t(locale, "reveal_ask")}
       items={[[t(locale, "c_what"), t(locale, "c_reveal_what")], [t(locale, "c_who"), t(locale, "c_reveal_who")],
         [t(locale, "c_long"), t(locale, "c_reveal_long")], [t(locale, "c_undo"), t(locale, "c_reveal_undo")]]}
@@ -153,7 +162,8 @@ export default function Pair({ params }: { params: Promise<{ locale: string }> }
       <ResultPanel title={t(locale, "revealed")} line={t(locale, "revealed_line")}>
         <Link className="btn" href={`/${locale}/help?book=1&from=private_check`}>{t(locale, "book")}</Link></ResultPanel>
       {genes.map((g) => <CardPreview key={g} locale={locale} code={cards[g] ?? null} gene={g} />)}
-      <p className="soft">{t(locale, "options")}</p></>)}
+      <WhatItMeans locale={locale} outcome="both" condition={genes.join(", ")} n={mine.n} />
+      <YourOptions locale={locale} /></>)}
     {phase === "result" && <p><button className="tertiary" onClick={restart}>{t(locale, "again")}</button></p>}
     {phase === "error" && (err === "codes_old" || err === "renew_failed") && (<div className="card" role="alert">
       <p>{t(locale, err === "codes_old" ? "codes_old" : "renew_failed")}</p>
